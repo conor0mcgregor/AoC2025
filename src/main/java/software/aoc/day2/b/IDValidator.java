@@ -16,8 +16,8 @@ public class IDValidator {
     public static IDValidator create() {return new IDValidator();}
 
     public long sumInvalidIdsFromFile(String fileName) throws URISyntaxException, IOException {
-        String content = Files.readString(stringToPath(fileName));
-        return Arrays.stream(content.split(","))
+        String ranges = Files.readString(stringToPath(fileName));
+        return Arrays.stream(ranges.split(","))
                 .mapToLong(this::sumInvalidIdInStrRange)
                 .sum();
     }
