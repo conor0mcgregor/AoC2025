@@ -27,14 +27,17 @@ public class DialManeger {
     public DialManeger ordersOfSpinsInFile(String fileName) throws IOException, URISyntaxException {
         Path filePath = stringToPath(fileName);
 
-        try (BufferedReader br = Files.newBufferedReader(filePath)) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                spin(line);
-            }
-        }
+        BufferedReader br = Files.newBufferedReader(filePath);
+        applySpinsFrom(br);
 
         return this;
+    }
+
+    private void applySpinsFrom(BufferedReader br) throws IOException {
+        String line;
+        while ((line = br.readLine()) != null) {
+            spin(line);
+        }
     }
 
     private Path stringToPath(String fileName) throws URISyntaxException {
