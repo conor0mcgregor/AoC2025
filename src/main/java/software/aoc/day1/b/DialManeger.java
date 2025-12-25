@@ -1,4 +1,4 @@
-package software.aoc.day1.a;
+package software.aoc.day1.b;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,35 +11,30 @@ import java.util.Arrays;
 
 public class DialManeger {
     private final Dial dial;
-    private int password;
     private DialManeger(){
         this.dial = Dial.create();
-        this.password = 0;
     }
 
     public static DialManeger create() {
         return new DialManeger();
     }
 
-    public int ordersOfSpins(String orders) {
+    public DialManeger ordersOfSpins(String orders) {
         Arrays.stream(orders.split("\n")).forEach(this::spin);
-        return getPosition();
+        return this;
     }
 
-    public int ordersOfSpinsInFile(String fileName) throws URISyntaxException, IOException {
+    public DialManeger ordersOfSpinsInFile(String fileName) throws IOException, URISyntaxException {
         Path filePath = stringToPath(fileName);
 
-        BufferedReader br = Files.newBufferedReader(filePath);
-        applySpinsFrom(br);
-
-        return getPosition();
-    }
-
-    private void applySpinsFrom(BufferedReader br) throws IOException {
-        String line;
-        while ((line = br.readLine()) != null) {
-            spin(line);
+        try (BufferedReader br = Files.newBufferedReader(filePath)) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                spin(line);
+            }
         }
+
+        return this;
     }
 
     private Path stringToPath(String fileName) throws URISyntaxException {
@@ -47,18 +42,14 @@ public class DialManeger {
         if (url == null) {
             throw new IllegalArgumentException("Archivo no encontrado en resources: " + fileName);
         }
+
         return Paths.get(url.toURI());
     }
 
-    public int spin(String turn) {
+    public DialManeger spin(String turn) {
         int rotation = Integer.parseInt(turn.substring(1));
         dial.rotate(isPlusRotation(turn)? rotation : rotation * -1);
-        checkPassword();
-        return getPosition();
-    }
-
-    private void checkPassword() {
-        password = getPosition() == 0 ? password+1 : password;
+        return this;
     }
 
     public int getPosition(){
@@ -70,6 +61,6 @@ public class DialManeger {
     }
 
     public int getPassword() {
-        return password;
+        return dial.getPassword();
     }
 }
