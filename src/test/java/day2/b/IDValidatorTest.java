@@ -1,7 +1,7 @@
-package day2.a;
+package day2.b;
 
 import org.junit.Test;
-import software.aoc.day2.a.IDValidator;
+import software.aoc.day2.b.IDValidator;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -14,13 +14,12 @@ public class IDValidatorTest {
     public void should_return_false_with_wrong_ID() {
         IDValidator idValidator = IDValidator.create();
         assertThat(idValidator.isInvalidId(1)).isEqualTo(false);
-        assertThat(idValidator.isInvalidId(5)).isEqualTo(false);
-        assertThat(idValidator.isInvalidId(10)).isEqualTo(false);
-        assertThat(idValidator.isInvalidId(1050)).isEqualTo(false);
-        assertThat(idValidator.isInvalidId(1256)).isEqualTo(false);
-        assertThat(idValidator.isInvalidId(1001)).isEqualTo(false);
-        assertThat(idValidator.isInvalidId(101)).isEqualTo(false);
-        assertThat(idValidator.isInvalidId(555)).isEqualTo(false);
+        assertThat(idValidator.isInvalidId(113)).isEqualTo(false);
+        assertThat(idValidator.isInvalidId(1134)).isEqualTo(false);
+        assertThat(idValidator.isInvalidId(101020)).isEqualTo(false);
+        assertThat(idValidator.isInvalidId(11141)).isEqualTo(false);
+        assertThat(idValidator.isInvalidId(5665)).isEqualTo(false);
+        assertThat(idValidator.isInvalidId(572226)).isEqualTo(false);
     }
     @Test
     public void should_return_true_with_correct_ID() {
@@ -39,15 +38,15 @@ public class IDValidatorTest {
     public void given_range_should_sum_invalids_ids() {
         IDValidator idValidator = IDValidator.create();
         assertThat(idValidator.sumInvalidIds(11,22)).isEqualTo(33);
-        assertThat(idValidator.sumInvalidIds(95,115)).isEqualTo(99);
-        assertThat(idValidator.sumInvalidIds(998,1012)).isEqualTo(1010);
+        assertThat(idValidator.sumInvalidIds(95,115)).isEqualTo(210);
+        assertThat(idValidator.sumInvalidIds(998,1012)).isEqualTo(2009);
         assertThat(idValidator.sumInvalidIds(1188511880,1188511890)).isEqualTo(1188511885);
     }
 
     @Test
     public void should_sum_all_invalid_id_from_file() throws URISyntaxException, IOException {
         IDValidator idValidator = IDValidator.create();
-        assertThat(idValidator.sumInvalidIdsFromFile("day2/a/input_aoc.txt")).isEqualTo(1227775554);
+        assertThat(idValidator.sumInvalidIdsFromFile("day2/a/input_aoc.txt")).isEqualTo(4174379265L);
     }
 
 }
