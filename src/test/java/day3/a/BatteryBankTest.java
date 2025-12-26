@@ -60,21 +60,21 @@ public class BatteryBankTest {
     @Test
     public void should_sum_joltage_when_file_has_one_bank() throws URISyntaxException, IOException {
         BatteryBank batteryBank = BatteryBank.create();
-        assertThat(batteryBank.sumAllMaxJoltageFromFile("day3/a/single_bank.txt"))
+        assertThat(batteryBank.sumAllMaxJoltageFromFile("day3/single_bank.txt"))
                 .isEqualTo(98);
     }
 
     @Test
     public void should_sum_multiple_simple_banks() throws URISyntaxException, IOException {
         BatteryBank batteryBank = BatteryBank.create();
-        assertThat(batteryBank.sumAllMaxJoltageFromFile("day3/a/simple_banks.txt"))
+        assertThat(batteryBank.sumAllMaxJoltageFromFile("day3/simple_banks.txt"))
                 .isEqualTo(12 + 34 + 56);
     }
 
     @Test
     public void should_sum_joltage_from_minimal_banks() throws URISyntaxException, IOException {
         BatteryBank batteryBank = BatteryBank.create();
-        assertThat(batteryBank.sumAllMaxJoltageFromFile("day3/a/minimal_banks.txt"))
+        assertThat(batteryBank.sumAllMaxJoltageFromFile("day3/minimal_banks.txt"))
                 .isEqualTo(11 + 22 + 33);
     }
 
@@ -84,7 +84,7 @@ public class BatteryBankTest {
     @Test
     public void should_sum_max_joltage_from_file() throws URISyntaxException, IOException {
         BatteryBank batteryBank = BatteryBank.create();
-        assertThat(batteryBank.sumAllMaxJoltageFromFile("day3/a/file1.txt")).isEqualTo(357);
+        assertThat(batteryBank.sumAllMaxJoltageFromFile("day3/file1.txt")).isEqualTo(357);
     }
 
 

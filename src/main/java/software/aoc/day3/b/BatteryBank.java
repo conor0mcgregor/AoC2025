@@ -1,9 +1,4 @@
-package software.aoc.day3.a;
-
-import software.aoc.day3.a.BatteryParser;
-import software.aoc.day3.a.FileReader;
-import software.aoc.day3.a.MaxJoltageParser;
-import software.aoc.day3.a.ResourceFileReader;
+package software.aoc.day3.b;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,8 +7,8 @@ import java.net.URISyntaxException;
 public class BatteryBank {
     private static final int JOLTAGE_DIGITS = 12;
     
-    private final software.aoc.day3.a.FileReader fileReader;
-    private final software.aoc.day3.a.BatteryParser batteryParser;
+    private final FileReader fileReader;
+    private final BatteryParser batteryParser;
 
     private BatteryBank(FileReader fileReader, BatteryParser batteryParser) {
         this.fileReader = fileReader;
@@ -29,19 +24,19 @@ public class BatteryBank {
     }
 
 
-    public int sumAllMaxJoltageFromFile(String fileName) throws URISyntaxException, IOException {
+    public long sumAllMaxJoltageFromFile(String fileName) throws URISyntaxException, IOException {
         try (BufferedReader reader = fileReader.read(fileName)) {
             return calculateTotalJoltage(reader);
         }
     }
 
 
-    public int getMaxJoltage(String batteryBank) {
+    public long getMaxJoltage(String batteryBank) {
         return batteryParser.parse(batteryBank);
     }
 
-    private int calculateTotalJoltage(BufferedReader reader) throws IOException {
-        int total = 0;
+    private long calculateTotalJoltage(BufferedReader reader) throws IOException {
+        long total = 0;
         String line;
         
         while ((line = reader.readLine()) != null) {
