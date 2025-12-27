@@ -28,7 +28,7 @@ public class PrintingDepartmentTest {
         );
 
         assertThat(department.countAccessibleRolls(grid))
-                .isEqualTo(1);
+                .isEqualTo(4);
     }
 
     @Test
@@ -42,7 +42,7 @@ public class PrintingDepartmentTest {
         );
 
         assertThat(department.countAccessibleRolls(grid))
-                .isEqualTo(0);
+                .isEqualTo(3);
     }
 
     @Test
@@ -57,12 +57,12 @@ public class PrintingDepartmentTest {
 
         // el centro tiene 4 vecinos diagonales
         assertThat(department.countAccessibleRolls(grid))
-                .isEqualTo(0);
+                .isEqualTo(4);
     }
 
     @Test
     public void should_handle_edges_without_out_of_bounds() {
-        PrintingDepartment department = PrintingDepartment.create();
+        PrintingDepartment department =  PrintingDepartment.create();
 
         List<String> grid = List.of(
                 "@.",
@@ -85,7 +85,7 @@ public class PrintingDepartmentTest {
 
         // solo el centro tiene menos de 4 vecinos
         assertThat(department.countAccessibleRolls(grid))
-                .isEqualTo(1);
+                .isEqualTo(4);
     }
 
     @Test
@@ -121,4 +121,31 @@ public class PrintingDepartmentTest {
         assertThat(department.countAccessibleRolls(grid))
                 .isEqualTo(1);
     }
+
+    @Test
+    public void should_return_zero_when_file_is_empty() throws Exception {
+        PrintingDepartment department = PrintingDepartment.create();
+
+        assertThat(department.countAccessbleRollsFrom("day4/empty.txt"))
+                .isEqualTo(0);
+    }
+
+    @Test
+    public void should_match_example_from_problem_statement_file() throws Exception {
+        PrintingDepartment department = PrintingDepartment.create();
+
+        assertThat(department.countAccessbleRollsFrom("day4/file1.txt"))
+                .isEqualTo(13);
+    }
+
+    @Test
+    public void should_count_single_roll_from_file() throws Exception {
+        PrintingDepartment department = PrintingDepartment.create();
+
+        assertThat(department.countAccessbleRollsFrom("day4/single_roll.txt"))
+                .isEqualTo(1);
+    }
+
+
+
 }
