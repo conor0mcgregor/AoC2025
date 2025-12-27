@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PrintingDepartment {
-    private final CountAccessRolls parser;
+    private final CounterAccessRolls parser;
     private final ResourceFileReader reader;
 
     private PrintingDepartment(){
-        this.parser = new CountAccessRolls();
+        this.parser = new CounterAccessRolls();
         this.reader = new ResourceFileReader();
     }
 

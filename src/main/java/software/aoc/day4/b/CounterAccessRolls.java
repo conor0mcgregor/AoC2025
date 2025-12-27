@@ -2,7 +2,7 @@ package software.aoc.day4.b;
 
 import java.util.List;
 
-public class CountAccessRolls implements DepartmentParser {
+public class CounterAccessRolls implements DepartmentParser {
     @Override
     public int parse(List<String> grid) {
         int count = 0;
