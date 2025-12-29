@@ -1,4 +1,4 @@
-package software.aoc.day8.a;
+package software.aoc.day8.b;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +20,6 @@ public class Graph {
         newNode.getNeighbors().forEach(this::addNode);
         nodeInside.getNeighbors().forEach(this::addNode);
     }
-
-
 
     public Graph addNode(Node node){
         if(!contains(node)) nodes.add(node);

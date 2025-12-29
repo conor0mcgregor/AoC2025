@@ -1,8 +1,8 @@
-package day8.a;
+package day8.b;
 
 import org.junit.jupiter.api.Test;
-import software.aoc.day8.a.Graph;
-import software.aoc.day8.a.Node;
+import software.aoc.day8.b.Graph;
+import software.aoc.day8.b.Node;
 
 import java.util.HashSet;
 import java.util.Set;
