@@ -1,4 +1,4 @@
-package day9;
+package day9.b;
 
 import org.junit.jupiter.api.Test;
 import software.aoc.day9.a.CinemaSolver;
