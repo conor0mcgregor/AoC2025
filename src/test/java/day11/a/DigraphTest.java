@@ -1,4 +1,4 @@
-package day11;
+package day11.a;
 
 import org.junit.jupiter.api.Test;
 import software.aoc.day11.a.Digraph;

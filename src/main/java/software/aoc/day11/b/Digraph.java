@@ -1,6 +1,9 @@
-package software.aoc.day11.a;
+package software.aoc.day11.b;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Digraph {
     private final List<Node> nodes;
@@ -47,23 +50,28 @@ public class Digraph {
 
     public Long getNumPaths(String nodeOrigin, String nodeDest) {
         memo.clear();
-        return calculedNumPaths(nodeOrigin, nodeDest);
+        return calculedNumPaths(nodeOrigin, nodeDest, false, false);
     }
 
-    private long calculedNumPaths(String nodeOrigin, String nodeDest) {
-        String key = nodeOrigin + "-" + nodeDest;
-        if(memo.containsKey(key)) return memo.get(key);
+    private Long calculedNumPaths(String nodeOrigin, String nodeDest, boolean passedFFT, boolean passedDAC) {
+        String key = nodeOrigin + "|" + passedFFT + "|" + passedDAC;
 
-        if(nodeOrigin.equals(nodeDest)) return 1L;
+        if (memo.containsKey(key)) return memo.get(key);
+
+        boolean nowFFT = passedFFT || nodeOrigin.equals("fft");
+        boolean nowDAC = passedDAC || nodeOrigin.equals("dac");
+
+        if (nodeOrigin.equals(nodeDest) && nowFFT && nowDAC) return 1L;
 
         long result = 0;
         Node current = getNode(nodeOrigin);
 
         if (current == null) return 0L;
 
-        for(Node child : getNode(nodeOrigin).getDestNodes()){
-            result += getNumPaths(child.getId(), nodeDest);
+        for (Node child : current.getDestNodes()) {
+            result += calculedNumPaths(child.getId(), nodeDest, nowFFT, nowDAC);
         }
+
         memo.put(key, result);
         return result;
     }
