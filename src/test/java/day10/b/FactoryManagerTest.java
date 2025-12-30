@@ -28,6 +28,17 @@ public class FactoryManagerTest {
         long result = factoryManager.getSumMinPulsesFrom(machines);
         assertThat(result).isEqualTo(6);
     }
+    @Test
+    void should_retur_five_pulses_in_this_example_part_two() throws URISyntaxException, IOException {
+        FactoryManager factoryManager = FactoryManager.create();
+
+        String machines = """
+            [####] (0) (1) {1,5}
+            """;
+
+        long result = factoryManager.getSumMinPulsesFrom(machines);
+        assertThat(result).isEqualTo(6);
+    }
 
     @Test
     void should_return_one_when_single_counter_needs_one_increment() throws URISyntaxException, IOException {
@@ -58,11 +69,11 @@ public class FactoryManagerTest {
         FactoryManager factoryManager = FactoryManager.create();
 
         String machines = """
-            [....] (0,1) (1) {3,3}
+            [....] (0) (1) {2,5}
             """;
 
         long result = factoryManager.getSumMinPulsesFrom(machines);
-        assertThat(result).isEqualTo(3);
+        assertThat(result).isEqualTo(7);
     }
 
 

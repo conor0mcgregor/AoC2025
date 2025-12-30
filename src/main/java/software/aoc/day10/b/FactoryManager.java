@@ -26,27 +26,48 @@ public class FactoryManager {
     }
     public long getSumMinPulsesFrom(String machines) throws IOException {
         BufferedReader dates = reader.StringToBR(machines);
-        return max(parserDates(dates), 0);
+        return parserDates(dates);
     }
 
     private long parserDates(BufferedReader dates) throws IOException {
-        long result = 0;
-        String line;
-        while ((line = dates.readLine()) != null){
-            result += calculateMinPulses(line);
-        }
-        return result;
+        return dates.lines()
+                .mapToLong(this::calculateMinPulses)
+                .sum();
     }
 
     private long calculateMinPulses(String machine) {
         String[] machineDates = machine.split(" ");
-        String stateDest = machineDates[0].substring(1, machineDates[0].length() - 1);
         String[] buttons = Arrays.copyOfRange(machineDates, 1, machineDates.length - 1);
         String voltage = machineDates[machineDates.length - 1];
 
-        NaryTree naryTree = new NaryTree(voltage.split(",").length);
 
-        return naryTree.getShortestPath(voltage, buttons);
+        int[] vector = passToVector(voltage);
+        return LinearSystemsOptimizer.minimizarPulsaciones(passToMatriz(buttons, vector.length), vector);
+
+    }
+
+    private int[] passToVector(String string) {
+        String inner = string.substring(1, string.length() - 1).trim();
+
+        if (inner.isEmpty()) {
+            return new int[0];
+        }
+
+        return Arrays.stream(inner.split(","))
+                .mapToInt(Integer::parseInt)
+                .toArray();
+    }
+
+    private int[][] passToMatriz(String[] buttons, int rows) {
+        int[][] matriz = new int[rows][buttons.length];
+
+        for (int col = 0; col < buttons.length; col++) {
+            for (int row : passToVector(buttons[col])) {
+                matriz[row][col] = 1;
+            }
+        }
+
+        return matriz;
     }
 
 
