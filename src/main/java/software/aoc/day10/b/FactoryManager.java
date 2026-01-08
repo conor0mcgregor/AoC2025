@@ -22,7 +22,7 @@ public class FactoryManager {
 
     public long getSumMinPulsesFromFile(String fileName) throws URISyntaxException, IOException {
         BufferedReader dates = reader.read(fileName);
-        return max(parserDates(dates), 0);
+        return parserDates(dates);
     }
     public long getSumMinPulsesFrom(String machines) throws IOException {
         BufferedReader dates = reader.StringToBR(machines);
@@ -31,6 +31,7 @@ public class FactoryManager {
 
     private long parserDates(BufferedReader dates) throws IOException {
         return dates.lines()
+                .filter(line -> !line.isBlank())
                 .mapToLong(this::calculateMinPulses)
                 .sum();
     }

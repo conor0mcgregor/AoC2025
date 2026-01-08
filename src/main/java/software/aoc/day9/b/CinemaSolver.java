@@ -21,19 +21,19 @@ public class CinemaSolver {
     public long findMaxRectangle(String fileName) throws URISyntaxException, IOException {
         List<Point> points = extractPoints(fileName);
         Board board = new Board(points);
-        return board.getBiggerRectangle();
+        return board.getMaxRect();
     }
 
     public long findMaxRectangle(List<String> listPoints) throws URISyntaxException, IOException {
         List<Point> points = extractPoints(listPoints);
         Board board = new Board(points);
-        return board.getBiggerRectangle();
+        return board.getMaxRect();
     }
 
 
     private List<Point> extractPoints(String fileName) throws URISyntaxException, IOException {
         BufferedReader br = reader.read(fileName);
-        return br.lines().map(this::stringToPoint).toList();
+        return extractPoints(br.readAllLines());
     }
 
     private List<Point> extractPoints(List<String> listPoints) {

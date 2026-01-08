@@ -5,180 +5,184 @@ import java.util.*;
 import static java.lang.Math.abs;
 
 public class Board {
+
     private final List<Point> redTiles;
-    private final Set<Point> greenTiles;
+    private final List<Integer> xMap = new ArrayList<>();
+    private final List<Integer> yMap = new ArrayList<>();
+
+    // Grilla comprimida: 0 = interior/borde (valido), 1 = exterior (invalido)
+    // Usamos 1 para invalido para facilitar la suma (si suma > 0, es invalido)
+    private int[][] compressedGrid;
+    private int[][] prefixSum;
 
     public Board(List<Point> points) {
         this.redTiles = new ArrayList<>(points);
-        this.greenTiles = calculateGreenTiles();
+        if (!points.isEmpty()) {
+            compressCoordinates();
+            buildCompressedGrid();
+            buildPrefixSum();
+        }
     }
 
-    public long getBiggerRectangle() {
-        long maxArea = 0;
+    private void compressCoordinates() {
+        TreeSet<Integer> distinctX = new TreeSet<>();
+        TreeSet<Integer> distinctY = new TreeSet<>();
 
-        for (int i = 0; i < redTiles.size(); i++) {
-            for (int j = i + 1; j < redTiles.size(); j++) {
-                Point point1 = redTiles.get(i);
-                Point point2 = redTiles.get(j);
+        for (Point p : redTiles) {
+            compressPoint(p, distinctX, distinctY);
+        }
+        addBorders(distinctX, distinctY);
 
-                if (isValidRectangle(point1, point2)) {
-                    long area = getArea(point1, point2);
-                    maxArea = Math.max(area, maxArea);
+        xMap.addAll(distinctX);
+        yMap.addAll(distinctY);
+    }
+
+    private static void compressPoint(Point p, TreeSet<Integer> distinctX, TreeSet<Integer> distinctY) {
+        distinctX.add(p.x());
+        distinctX.add(p.x() + 1); // Importante para rangos
+        distinctY.add(p.y());
+        distinctY.add(p.y() + 1);
+    }
+
+    private void addBorders(TreeSet<Integer> distinctX, TreeSet<Integer> distinctY) {
+        int minX = distinctX.first();
+        int maxX = distinctX.last();
+        int minY = distinctY.first();
+        int maxY = distinctY.last();
+
+        distinctX.add(minX - 1);
+        distinctX.add(maxX + 2);
+        distinctY.add(minY - 1);
+        distinctY.add(maxY + 2);
+    }
+    
+    private int getXIndex(int x) { return Collections.binarySearch(xMap, x); }
+    private int getYIndex(int y) { return Collections.binarySearch(yMap, y); }
+
+
+    private void buildCompressedGrid() {
+        int w = xMap.size() - 1;
+        int h = yMap.size() - 1;
+
+        int[][] tempGrid = buildTempGrid(h, w);
+
+        floodFill(h, w, tempGrid);
+    }
+
+    private void floodFill(int h, int w, int[][] tempGrid) {
+        compressedGrid = new int[h][w]; // 1 = invalido (exterior), 0 = valido (interior/pared)
+
+        Queue<Point> q = new LinkedList<>();
+        q.add(new Point(0, 0));
+        boolean[][] visited = new boolean[h][w];
+        visited[0][0] = true;
+        compressedGrid[0][0] = 1; // Marcar como exterior
+
+        while (!q.isEmpty()) {
+            Point curr = q.poll();
+            int cx = curr.x();
+            int cy = curr.y();
+
+            int[] dx = {0, 0, 1, -1};
+            int[] dy = {1, -1, 0, 0};
+
+            for (int k = 0; k < 4; k++) {
+                int nx = cx + dx[k];
+                int ny = cy + dy[k];
+
+                if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
+                    // Si no visitado y NO es una pared
+                    if (!visited[ny][nx] && tempGrid[ny][nx] != -1) {
+                        visited[ny][nx] = true;
+                        compressedGrid[ny][nx] = 1; // Es exterior
+                        q.add(new Point(nx, ny));
+                    }
                 }
             }
         }
+    }
 
+    private int[][] buildTempGrid(int h, int w) {
+        int[][] tempGrid = new int[h][w];
+
+        int n = redTiles.size();
+        for (int i = 0; i < n; i++) {
+            Point p1 = redTiles.get(i);
+            Point p2 = redTiles.get((i + 1) % n);
+
+            int ix1 = getXIndex(p1.x());
+            int ix2 = getXIndex(p2.x());
+            int iy1 = getYIndex(p1.y());
+            int iy2 = getYIndex(p2.y());
+
+            int xStart = Math.min(ix1, ix2);
+            int xEnd = Math.max(ix1, ix2);
+            int yStart = Math.min(iy1, iy2);
+            int yEnd = Math.max(iy1, iy2);
+
+            if (ix1 == ix2) { // Linea Vertical
+                for (int y = yStart; y <= yEnd; y++) tempGrid[y][xStart] = -1;
+            } else { // Linea Horizontal
+                for (int x = xStart; x <= xEnd; x++) tempGrid[yStart][x] = -1;
+            }
+        }
+        return tempGrid;
+    }
+
+    private void buildPrefixSum() {
+        int w = compressedGrid[0].length;
+        int h = compressedGrid.length;
+        prefixSum = new int[h + 1][w + 1];
+
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                prefixSum[y + 1][x + 1] = compressedGrid[y][x]
+                        + prefixSum[y][x + 1]
+                        + prefixSum[y + 1][x]
+                        - prefixSum[y][x];
+            }
+        }
+    }
+
+    private boolean isValidRect(int x1, int y1, int x2, int y2) {
+        int ix1 = getXIndex(Math.min(x1, x2));
+        int ix2 = getXIndex(Math.max(x1, x2));
+        int iy1 = getYIndex(Math.min(y1, y2));
+        int iy2 = getYIndex(Math.max(y1, y2));
+
+        int invalidCount =
+                prefixSum[iy2 + 1][ix2 + 1]
+                        - prefixSum[iy1][ix2 + 1]
+                        - prefixSum[iy2 + 1][ix1]
+                        + prefixSum[iy1][ix1];
+
+        return invalidCount == 0;
+    }
+
+    public long getMaxRect() {
+        long maxArea = 0;
+        int n = redTiles.size();
+
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                Point p1 = redTiles.get(i);
+                Point p2 = redTiles.get(j);
+
+                long area = getAreaOf(p1, p2);
+
+                if (area <= maxArea) continue;
+
+                if (isValidRect(p1.x(), p1.y(), p2.x(), p2.y())) maxArea = area;
+
+            }
+        }
         return maxArea;
     }
 
-    private boolean isValidRectangle(Point p1, Point p2) {
-        int minX = Math.min(p1.x(), p2.x());
-        int maxX = Math.max(p1.x(), p2.x());
-        int minY = Math.min(p1.y(), p2.y());
-        int maxY = Math.max(p1.y(), p2.y());
-
-        // Verificar cada punto del rectángulo
-        for (int x = minX; x <= maxX; x++) {
-            for (int y = minY; y <= maxY; y++) {
-                Point current = new Point(x, y);
-
-                // Debe ser roja o verde
-                if (!isRedTile(current) && !isGreenTile(current)) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
+    private static long getAreaOf(Point p1, Point p2) {
+        long width = Math.abs((long) p1.x() - p2.x()) + 1;
+        long height = Math.abs((long) p1.y() - p2.y()) + 1;
+        long area = width * height;
+        return area;
     }
-
-
-    private Set<Point> calculateGreenTiles() {
-        Set<Point> green = new HashSet<>();
-
-        for (int i = 0; i < redTiles.size(); i++) {
-            Point current = redTiles.get(i);
-            Point next = redTiles.get((i + 1) % redTiles.size());
-
-            green.addAll(getLineBetween(current, next));
-        }
-
-        // 2. Agregar fichas dentro del polígono
-        green.addAll(getPointsInsidePolygon());
-
-        return green;
-    }
-
-    private List<Point> getLineBetween(Point p1, Point p2) {
-        List<Point> line = new ArrayList<>();
-
-        if (p1.x() == p2.x()) {
-            // Línea vertical
-            int minY = Math.min(p1.y(), p2.y());
-            int maxY = Math.max(p1.y(), p2.y());
-
-            for (int y = minY; y <= maxY; y++) {
-                line.add(new Point(p1.x(), y));
-            }
-        } else if (p1.y() == p2.y()) {
-            // Línea horizontal
-            int minX = Math.min(p1.x(), p2.x());
-            int maxX = Math.max(p1.x(), p2.x());
-
-            for (int x = minX; x <= maxX; x++) {
-                line.add(new Point(x, p1.y()));
-            }
-        }
-
-        return line;
-    }
-
-
-    private Set<Point> getPointsInsidePolygon() {
-        Set<Point> inside = new HashSet<>();
-
-        // Encontrar los límites del polígono
-        int minX = redTiles.stream().mapToInt(Point::x).min().orElse(0);
-        int maxX = redTiles.stream().mapToInt(Point::x).max().orElse(0);
-        int minY = redTiles.stream().mapToInt(Point::y).min().orElse(0);
-        int maxY = redTiles.stream().mapToInt(Point::y).max().orElse(0);
-
-        // Verificar cada punto en el área delimitada
-        for (int x = minX; x <= maxX; x++) {
-            for (int y = minY; y <= maxY; y++) {
-                Point point = new Point(x, y);
-
-                if (isPointInsidePolygon(point)) {
-                    inside.add(point);
-                }
-            }
-        }
-
-        return inside;
-    }
-
-
-    private boolean isPointInsidePolygon(Point point) {
-        int intersections = 0;
-
-        for (int i = 0; i < redTiles.size(); i++) {
-            Point p1 = redTiles.get(i);
-            Point p2 = redTiles.get((i + 1) % redTiles.size());
-
-            if (rayIntersectsEdge(point, p1, p2)) {
-                intersections++;
-            }
-        }
-
-        return intersections % 2 == 1;
-    }
-
-    private boolean rayIntersectsEdge(Point point, Point edgeStart, Point edgeEnd) {
-        // Asegurar que edgeStart.y <= edgeEnd.y
-        if (edgeStart.y() > edgeEnd.y()) {
-            Point temp = edgeStart;
-            edgeStart = edgeEnd;
-            edgeEnd = temp;
-        }
-
-        // El punto debe estar dentro del rango Y de la arista
-        if (point.y() < edgeStart.y() || point.y() > edgeEnd.y()) {
-            return false;
-        }
-
-        // Evitar contar vértices dos veces
-        if (point.y() == edgeEnd.y()) {
-            return false;
-        }
-
-        // Calcular la coordenada X de la intersección
-        if (edgeStart.y() == edgeEnd.y()) {
-            // Arista horizontal, no intersecta con rayo horizontal
-            return false;
-        }
-
-        double xIntersection = edgeStart.x() +
-                (double) (point.y() - edgeStart.y()) * (edgeEnd.x() - edgeStart.x()) /
-                        (edgeEnd.y() - edgeStart.y());
-
-        // La intersección debe estar a la derecha del punto
-        return xIntersection >= point.x();
-    }
-
-
-    private long getArea(Point point1, Point point2) {
-        return (long) (abs(point1.x() - point2.x()) + 1) *
-                (abs(point1.y() - point2.y()) + 1);
-    }
-
-
-    private boolean isRedTile(Point point) {
-        return redTiles.contains(point);
-    }
-
-
-    private boolean isGreenTile(Point point) {
-        return greenTiles.contains(point);
-    }
-
 }

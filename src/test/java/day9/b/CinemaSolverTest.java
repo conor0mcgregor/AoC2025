@@ -1,7 +1,7 @@
 package day9.b;
 
 import org.junit.jupiter.api.Test;
-import software.aoc.day9.a.CinemaSolver;
+import software.aoc.day9.b.CinemaSolver;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -14,7 +14,7 @@ public class CinemaSolverTest {
     void shouldReturnMaxRectangle() throws URISyntaxException, IOException {
         CinemaSolver cinemaSolver = CinemaSolver.create();
         assertThat(cinemaSolver.findMaxRectangle("day9/file1.txt"))
-                .isEqualTo(50);
+                .isEqualTo(24);
     }
 
     @Test
