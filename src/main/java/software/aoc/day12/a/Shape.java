@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 @SuppressWarnings("java:S6218") // We don't need a `toString` method
-record Shape(int width, int height, boolean[][] parts) {
+record  Shape(int width, int height, boolean[][] parts) {
 
   static Shape parse(List<String> lines) {
     int height = lines.size();

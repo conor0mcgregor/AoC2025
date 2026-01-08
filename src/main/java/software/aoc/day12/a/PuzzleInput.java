@@ -15,10 +15,10 @@ record PuzzleInput(List<Present> presents, List<Tree> trees) {
   private static List<List<String>> splitByEmptyLines(List<String> lines) {
     List<List<String>> blocks = new ArrayList<>();
     List<String> currentBlock = new ArrayList<>();
+
     for (String line : lines) {
       if (line.isBlank()) {
-        blocks.add(currentBlock);
-        currentBlock = new ArrayList<>();
+          currentBlock = addBlock(blocks, currentBlock);
       } else {
         currentBlock.add(line);
       }
@@ -26,4 +26,10 @@ record PuzzleInput(List<Present> presents, List<Tree> trees) {
     blocks.add(currentBlock);
     return blocks;
   }
+
+    private static List<String> addBlock(List<List<String>> blocks, List<String> currentBlock) {
+        blocks.add(currentBlock);
+        currentBlock = new ArrayList<>();
+        return currentBlock;
+    }
 }
