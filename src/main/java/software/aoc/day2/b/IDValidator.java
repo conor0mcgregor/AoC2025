@@ -1,42 +1,34 @@
 package software.aoc.day2.b;
 
+import software.aoc.FileReader;
+import software.aoc.ResourceFileReader;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.stream.LongStream;
 
 public class IDValidator {
+    private final FileReader reader;
+    private IDValidator(FileReader reader) {this.reader = reader;}
 
-    private IDValidator() {}
-
-    public static IDValidator create() {return new IDValidator();}
+    public static IDValidator create() {return new IDValidator(new ResourceFileReader());}
 
     public long sumInvalidIdsFromFile(String fileName) throws URISyntaxException, IOException {
-        String ranges = Files.readString(stringToPath(fileName));
+        String ranges = reader.read(fileName).readLine();
+        return sumAllInvalidIds(ranges);
+    }
+
+    private long sumAllInvalidIds(String ranges) {
         return Arrays.stream(ranges.split(","))
                 .mapToLong(this::sumInvalidIdInStrRange)
                 .sum();
     }
 
-    private long sumInvalidIdInStrRange(String range) {
-        String[] intervalos = range.split("-");
-        return sumInvalidIds(stringToLong(intervalos[0]), stringToLong(intervalos[1]));
+    private long sumInvalidIdInStrRange(String rangeStr) {
+        Range range = Range.with(rangeStr);
+        return sumInvalidIds(range.a(), range.b());
     }
-
-    private Long stringToLong(String str) {
-        return Long.parseLong(str);
-    }
-
-    private Path stringToPath(String fileName) throws URISyntaxException {
-        URL url = getClass().getResource("/" + fileName);
-        if (url == null) {throw new IllegalArgumentException("Archivo no encontrado en resources: " + fileName);}
-        return Paths.get(url.toURI());
-    }
-
 
     public long sumInvalidIds(long start, long end) {
         return LongStream.rangeClosed(start, end)
@@ -58,10 +50,8 @@ public class IDValidator {
     private boolean findPatron(int cifras, String strId) {
         for (int patternLength = 1; patternLength <= cifras / 2; patternLength++) {
             if (cifras % patternLength != 0) continue;
-
             if (existPatronIn(strId, cifras, patternLength)) return true;
         }
-
         return false;
     }
 

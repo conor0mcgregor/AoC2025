@@ -1,5 +1,6 @@
 package day5.b;
 import org.junit.jupiter.api.Test;
+import software.aoc.day5.b.Range;
 import software.aoc.day5.b.RangesManager;
 
 import java.util.List;
@@ -14,10 +15,10 @@ class RangesManagerTest {
         manager.addRange(1, 5);
         manager.addRange(30, 40);
 
-        List<RangesManager.Range> expected = List.of(
-                new RangesManager.Range(1, 5),
-                new RangesManager.Range(10, 20),
-                new RangesManager.Range(30, 40)
+        List<Range> expected = List.of(
+                new Range(1, 5),
+                new Range(10, 20),
+                new Range(30, 40)
         );
 
         assertThat(manager.getRanges()).isEqualTo(expected);
@@ -29,8 +30,8 @@ class RangesManagerTest {
         manager.addRange(1, 10);
         manager.addRange(5, 15);
 
-        List<RangesManager.Range> expected = List.of(
-                new RangesManager.Range(1, 15)
+        List<Range> expected = List.of(
+                new Range(1, 15)
         );
 
         assertThat(manager.getRanges()).isEqualTo(expected);
@@ -43,8 +44,8 @@ class RangesManagerTest {
         manager.addRange(3, 8);
         manager.addRange(6, 12);
 
-        List<RangesManager.Range> expected = List.of(
-                new RangesManager.Range(1, 12)
+        List<Range> expected = List.of(
+                new Range(1, 12)
         );
 
         assertThat(manager.getRanges()).isEqualTo(expected);
@@ -56,9 +57,9 @@ class RangesManagerTest {
         manager.addRange(1, 5);
         manager.addRange(6, 10);
 
-        List<RangesManager.Range> expected = List.of(
-                new RangesManager.Range(1, 5),
-                new RangesManager.Range(6, 10)
+        List<Range> expected = List.of(
+                new Range(1, 5),
+                new Range(6, 10)
         );
 
         assertThat(manager.getRanges()).isEqualTo(expected);
@@ -75,8 +76,8 @@ class RangesManagerTest {
         manager.addRange(50, 100);
         manager.addRange(60, 65);
         manager.addRange(20, 52);
-        List<RangesManager.Range> expected = List.of(
-                new RangesManager.Range(1, 100)
+        List<Range> expected = List.of(
+                new Range(1, 100)
         );
         assertThat(manager.getRanges()).isEqualTo(expected);
     }

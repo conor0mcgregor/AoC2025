@@ -1,5 +1,7 @@
 package software.aoc.day3.b;
 
+import java.util.Arrays;
+
 public class MaxJoltageParser implements BatteryParser {
     private final int targetDigits;
 
@@ -25,16 +27,20 @@ public class MaxJoltageParser implements BatteryParser {
         int startIndex = 0;
 
         for (int position = 0; position < targetDigits; position++) {
-            int digitsNeeded = targetDigits - position;
-            int searchLimit = bank.length() - digitsNeeded + 1;
-            
-            MaxDigitResult maxResult = findMaxDigitInRange(bank, startIndex, searchLimit);
-            
-            result[position] = maxResult.value;
-            startIndex = maxResult.index + 1;
+            startIndex = maxIndexIn(bank, position, startIndex, result);
         }
 
         return result;
+    }
+
+    private int maxIndexIn(String bank, int position, int startIndex, int[] result) {
+        int digitsNeeded = targetDigits - position;
+        int searchLimit = bank.length() - digitsNeeded + 1;
+
+        MaxDigitResult maxResult = findMaxDigitInRange(bank, startIndex, searchLimit);
+
+        result[position] = maxResult.value;
+        return maxResult.index + 1;
     }
 
     private MaxDigitResult findMaxDigitInRange(String bank, int startIndex, int endIndex) {
@@ -54,13 +60,9 @@ public class MaxJoltageParser implements BatteryParser {
     }
 
     private long convertToLong(int[] digits) {
-        long result = 0;
-        
-        for (int digit : digits) {
-            result = result * 10 + digit;
-        }
-        
-        return result;
+        return Arrays.stream(digits)
+                .asLongStream()  // ✓ Convierte a LongStream
+                .reduce(0L, (acc, d) -> acc * 10 + d);
     }
 
     private static class MaxDigitResult {

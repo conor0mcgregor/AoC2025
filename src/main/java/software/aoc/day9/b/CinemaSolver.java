@@ -1,6 +1,6 @@
 package software.aoc.day9.b;
 
-import software.aoc.day7.ResourceFileReader;
+import software.aoc.ResourceFileReader;
 
 import java.io.BufferedReader;
 import java.io.IOException;

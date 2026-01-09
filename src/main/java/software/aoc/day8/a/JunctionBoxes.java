@@ -1,6 +1,7 @@
 package software.aoc.day8.a;
 
-import software.aoc.day8.ResourceFileReader;
+import software.aoc.FileReader;
+import software.aoc.ResourceFileReader;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -12,10 +13,10 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class JunctionBoxes {
-    private final GraphSet graphSet;
+    private final GraphCollection graphSet;
     private List<Edge> edges;
     private final List<Node> nodes;
-    private final ResourceFileReader reader;
+    private final FileReader reader;
 
     private JunctionBoxes() {
         this.graphSet = new GraphSet();
@@ -28,25 +29,21 @@ public class JunctionBoxes {
         return new JunctionBoxes();
     }
 
-    public long getBiggersConnection(String fileName, int i) throws URISyntaxException, IOException {
-        parserNodes(reader.read(fileName).lines());
-        parserEdges();
-
-        groupNodes(i);
-
-        return productTreeBiggers();
+    public long getBiggersConnection(String fileName, int numConections) throws URISyntaxException, IOException {
+        return getBiggersConnection(reader.read(fileName).readAllLines(), numConections);
     }
-    public long getBiggersConnection(List<String> dates, int i){
+
+    public long getBiggersConnection(List<String> dates, int numConections){
         parserNodes(dates.stream());
         parserEdges();
 
-        groupNodes(i);
+        groupNodes(numConections);
 
         return productTreeBiggers();
     }
 
     private long productTreeBiggers() {
-        List<Integer> sizes = graphSet.sizes();
+        List<Integer> sizes = graphSet.graphsSizes();
         return sizes.stream()
                 .sorted(Comparator.reverseOrder())
                 .limit(3)

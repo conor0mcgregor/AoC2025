@@ -1,6 +1,7 @@
 package software.aoc.day11.b;
 
-import software.aoc.day11.ResourceFileReader;
+import software.aoc.FileReader;
+import software.aoc.ResourceFileReader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class Reactor {
-    private final ResourceFileReader reader;
+    private final FileReader reader;
 
     public Reactor() {
         this.reader = new ResourceFileReader();

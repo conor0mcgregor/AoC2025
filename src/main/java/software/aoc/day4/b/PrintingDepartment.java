@@ -1,5 +1,8 @@
 package software.aoc.day4.b;
 
+import software.aoc.FileReader;
+import software.aoc.ResourceFileReader;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -7,11 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PrintingDepartment {
-    private final CounterAccessRolls parser;
-    private final ResourceFileReader reader;
+    private final FileReader reader;
 
     private PrintingDepartment(){
-        this.parser = new CounterAccessRolls();
         this.reader = new ResourceFileReader();
     }
 
@@ -20,13 +21,13 @@ public class PrintingDepartment {
     }
 
     public int countAccessibleRolls(List<String> grid) {
-        return parser.parse(grid);
+        DepartmentParser parser = CounterAccessRolls.create(grid);
+        return parser.parse();
     }
 
     public int countAccessibleRollsFrom(String fileName) throws URISyntaxException, IOException {
         try (BufferedReader br = reader.read(fileName)) {
-            List<String> grid = new ArrayList<>(br.lines().toList());
-            return parser.parse(grid);
+            return countAccessibleRolls(br.lines().toList());
         }
     }
 

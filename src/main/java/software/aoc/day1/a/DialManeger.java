@@ -1,24 +1,24 @@
 package software.aoc.day1.a;
 
+import software.aoc.FileReader;
+import software.aoc.ResourceFileReader;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 
 public class DialManeger {
     private final Dial dial;
-    private int password;
-    private DialManeger(){
+    private final FileReader reader;
+
+    private DialManeger(FileReader reader){
         this.dial = Dial.create();
-        this.password = 0;
+        this.reader = reader;
     }
 
     public static DialManeger create() {
-        return new DialManeger();
+        return new DialManeger(new ResourceFileReader());
     }
 
     public int ordersOfSpins(String orders) {
@@ -27,9 +27,7 @@ public class DialManeger {
     }
 
     public int ordersOfSpinsInFile(String fileName) throws URISyntaxException, IOException {
-        Path filePath = stringToPath(fileName);
-
-        BufferedReader br = Files.newBufferedReader(filePath);
+        BufferedReader br = reader.read(fileName);
         applySpinsFrom(br);
 
         return getPosition();
@@ -42,23 +40,10 @@ public class DialManeger {
         }
     }
 
-    private Path stringToPath(String fileName) throws URISyntaxException {
-        URL url = getClass().getResource("/" + fileName);
-        if (url == null) {
-            throw new IllegalArgumentException("Archivo no encontrado en resources: " + fileName);
-        }
-        return Paths.get(url.toURI());
-    }
-
     public int spin(String turn) {
         int rotation = Integer.parseInt(turn.substring(1));
         dial.rotate(isPlusRotation(turn)? rotation : rotation * -1);
-        checkPassword();
         return getPosition();
-    }
-
-    private void checkPassword() {
-        password = getPosition() == 0 ? password+1 : password;
     }
 
     public int getPosition(){
@@ -70,6 +55,6 @@ public class DialManeger {
     }
 
     public int getPassword() {
-        return password;
+        return dial.getPassword();
     }
 }

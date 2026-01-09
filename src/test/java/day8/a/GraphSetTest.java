@@ -16,7 +16,7 @@ public class GraphSetTest {
         Node node2 = new Node(2, 20, 20, 10);
         graphSet.addNewConnection(node1, node2);
 
-        assertThat(graphSet.sizes()).isEqualTo(List.of(2));
+        assertThat(graphSet.graphsSizes()).isEqualTo(List.of(2));
         assertThat(graphSet.lenght()).isEqualTo(1);
         assertThat(graphSet.getGraphs().getFirst().getNodes()).isEqualTo(List.of(node1, node2));
 
@@ -37,7 +37,7 @@ public class GraphSetTest {
         graphSet.addNewConnection(node2, node2a);
         graphSet.addNewConnection(node2, node2b);
 
-        assertThat(graphSet.sizes()).isEqualTo(List.of(3, 3));
+        assertThat(graphSet.graphsSizes()).isEqualTo(List.of(3, 3));
         assertThat(graphSet.lenght()).isEqualTo(2);
         assertThat(graphSet.getGraphs().getFirst().getNodes()).isEqualTo(List.of(node1, node1a, node1b));
         assertThat(graphSet.getGraphs().getLast().getNodes()).isEqualTo(List.of(node2, node2a, node2b));
@@ -61,7 +61,7 @@ public class GraphSetTest {
 
         graphSet.addNewConnection(node1b, node2b);
 
-        assertThat(graphSet.sizes()).isEqualTo(List.of(6));
+        assertThat(graphSet.graphsSizes()).isEqualTo(List.of(6));
         assertThat(graphSet.lenght()).isEqualTo(1);
         assertThat(graphSet.getGraphs().getFirst().getNodes()).isEqualTo(List.of(node1, node1a, node1b, node2, node2a, node2b));
 

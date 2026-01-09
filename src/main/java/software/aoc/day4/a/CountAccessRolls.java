@@ -3,12 +3,23 @@ package software.aoc.day4.a;
 import java.util.List;
 
 public class CountAccessRolls implements DepertmentParser{
+    private List<String> grid;
+
+    private CountAccessRolls(List<String> grid) {
+        this.grid = grid;
+    }
+
+    public static CountAccessRolls create(List<String> grid){
+        return new CountAccessRolls((grid));
+    }
+
     @Override
-    public int parse(List<String> grid) {
+    public int parse() {
         int count = 0;
+
         for (int i = 0; i < grid.size(); i++) {
             for (int j = 0; j < grid.get(i).length(); j++) {
-                if (grid.get(i).charAt(j) == '@' && isAccessible(grid, i, j)) {
+                if (grid.get(i).charAt(j) == '@' && isAccessible(i, j)) {
                     count++;
                 }
             }
@@ -17,12 +28,12 @@ public class CountAccessRolls implements DepertmentParser{
         return count;
     }
 
-    private boolean isAccessible(List<String> grid, int row, int col) {
-        int neighbors = countNeighbors(grid, row, col);
+    private boolean isAccessible(int row, int col) {
+        int neighbors = countNeighbors(row, col);
         return neighbors < 4;
     }
 
-    private int countNeighbors(List<String> grid, int row, int col) {
+    private int countNeighbors(int row, int col) {
         int count = 0;
 
         int[] rowOffsets = {-1, -1, -1,  0,  0,  1,  1,  1};
@@ -32,7 +43,7 @@ public class CountAccessRolls implements DepertmentParser{
             int newRow = row + rowOffsets[i];
             int newCol = col + colOffsets[i];
 
-            if (isValidPosition(grid, newRow, newCol)) {
+            if (isValidPosition(newRow, newCol)) {
                 if (grid.get(newRow).charAt(newCol) == '@') {
                     count++;
                 }
@@ -42,7 +53,7 @@ public class CountAccessRolls implements DepertmentParser{
         return count;
     }
 
-    private boolean isValidPosition(List<String> grid, int row, int col) {
+    private boolean isValidPosition(int row, int col) {
         return row >= 0 && row < grid.size() &&
                 col >= 0 && col < grid.getFirst().length();
     }

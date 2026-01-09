@@ -28,17 +28,15 @@ public class RangesManager {
     }
 
     private void examine(Range range1, Range range2, int index) {
-        if (isUnifiable(range1, range2)) {
-            unify(range1, range2, index);
-        }
+        if (isUnifiable(range1, range2)) unify(range1, range2, index);
     }
 
     private boolean isUnifiable(Range range1, Range range2) {
-        return range1.b >= range2.a;
+        return range1.b() >= range2.a();
     }
 
     private void unify(Range range1, Range range2, int index) {
-        Range range = new Range(min(range1.a, range2.a), max(range1.b, range2.b));
+        Range range = new Range(min(range1.a(), range2.a()), max(range1.b(), range2.b()));
         ranges.set(index, range);
         ranges.remove(index+1);
         upDateRanges();
@@ -51,11 +49,5 @@ public class RangesManager {
 
     public List<Range> getRanges() {
         return ranges;
-    }
-
-    public record Range(long a, long b){
-        public boolean isInside(long num) {
-            return a <= num && b >= num;
-        }
     }
 }

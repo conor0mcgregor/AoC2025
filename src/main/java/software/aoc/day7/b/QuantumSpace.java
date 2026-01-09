@@ -1,16 +1,17 @@
 package software.aoc.day7.b;
 import java.util.*;
 
-class QuantumManifold {
+public class QuantumSpace implements QuantumSimulator {
 
     private final Map<String, Long> memo = new HashMap<>();
     private final List<String> grid;
     private int lastRow;
 
-    QuantumManifold(List<String> layers) {
+    public QuantumSpace(List<String> layers) {
         grid = layers;
     }
 
+    @Override
     public long countTimelines() {
         lastRow = grid.size() - 1;
         memo.clear();
@@ -18,19 +19,17 @@ class QuantumManifold {
         int startCol = grid.getFirst().indexOf('S');
         return getTimelines(0, startCol);
     }
+
     private long getTimelines(int row, int col) {
-        // Caso base: fuera de límites (si el movimiento lateral se sale)
         if (col < 0 || col >= grid.getFirst().length()) {
             return 0;
         }
 
-        // Crear una clave única para la memoización
         String key = row + "," + col;
         if (memo.containsKey(key)) {
             return memo.get(key);
         }
 
-        // Caso base: llegamos a la última fila
         if (row == lastRow) {
             return 1;
         }

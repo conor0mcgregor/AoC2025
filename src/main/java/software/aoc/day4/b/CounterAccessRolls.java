@@ -1,18 +1,29 @@
 package software.aoc.day4.b;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CounterAccessRolls implements DepartmentParser {
+    private List<String> grid;
+
+    private CounterAccessRolls(List<String> grid) {
+        this.grid = new ArrayList<>(grid);
+    }
+
+    public static CounterAccessRolls create(List<String> grid) {
+        return new CounterAccessRolls(grid);
+    }
+
     @Override
-    public int parse(List<String> grid) {
+    public int parse() {
         int count = 0;
         boolean change = true;
         while (change){
             change = false;
             for (int i = 0; i < grid.size(); i++) {
                 for (int j = 0; j < grid.get(i).length(); j++) {
-                    if (grid.get(i).charAt(j) == '@' && isAccessible(grid, i, j)) {
-                        removeRoll(grid, i, j);
+                    if (grid.get(i).charAt(j) == '@' && isAccessible(i, j)) {
+                        removeRoll(i, j);
                         count++;
                         change = true;
                     }
@@ -22,7 +33,7 @@ public class CounterAccessRolls implements DepartmentParser {
         return count;
     }
 
-    private void removeRoll(List<String> grid, int row, int col) {
+    private void removeRoll(int row, int col) {
         String currentRow = grid.get(row);
 
         String newRow = currentRow.substring(0, col) + '.' + currentRow.substring(col + 1);
@@ -30,12 +41,12 @@ public class CounterAccessRolls implements DepartmentParser {
         grid.set(row, newRow);
     }
 
-    private boolean isAccessible(List<String> grid, int row, int col) {
-        int neighbors = countNeighbors(grid, row, col);
+    private boolean isAccessible(int row, int col) {
+        int neighbors = countNeighbors(row, col);
         return neighbors < 4;
     }
 
-    private int countNeighbors(List<String> grid, int row, int col) {
+    private int countNeighbors(int row, int col) {
         int count = 0;
 
         int[] rowOffsets = {-1, -1, -1,  0,  0,  1,  1,  1};
@@ -45,7 +56,7 @@ public class CounterAccessRolls implements DepartmentParser {
             int newRow = row + rowOffsets[i];
             int newCol = col + colOffsets[i];
 
-            if (isValidPosition(grid, newRow, newCol)) {
+            if (isValidPosition(newRow, newCol)) {
                 if (grid.get(newRow).charAt(newCol) == '@') {
                     count++;
                 }
@@ -55,7 +66,7 @@ public class CounterAccessRolls implements DepartmentParser {
         return count;
     }
 
-    private boolean isValidPosition(List<String> grid, int row, int col) {
+    private boolean isValidPosition(int row, int col) {
         return row >= 0 && row < grid.size() &&
                 col >= 0 && col < grid.getFirst().length();
     }

@@ -1,13 +1,8 @@
 package software.aoc.day3.a;
 
 public class MaxJoltageParser implements BatteryParser {
-    private final int targetDigits;
 
-    public MaxJoltageParser(int targetDigits) {
-        if (targetDigits <= 0) {
-            throw new IllegalArgumentException("Target digits must be positive");
-        }
-        this.targetDigits = targetDigits;
+    public MaxJoltageParser() {
     }
 
     @Override
@@ -15,7 +10,6 @@ public class MaxJoltageParser implements BatteryParser {
         if (batteryBank == null || batteryBank.isEmpty()) {
             return 0;
         }
-
         return extractMaxDigits(batteryBank);
     }
 

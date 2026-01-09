@@ -1,5 +1,8 @@
 package software.aoc.day4.a;
 
+import software.aoc.FileReader;
+import software.aoc.ResourceFileReader;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -7,35 +10,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PrintingDepartment {
-    private final CountAccessRolls countAccessRolls;
-    private final ResourceFileReader reader;
+    private final FileReader reader;
 
-    private PrintingDepartment(){
-        this.countAccessRolls = new CountAccessRolls();
-        this.reader = new ResourceFileReader();
+    private PrintingDepartment(FileReader reader){
+        this.reader = reader;
     }
 
     public static PrintingDepartment create() {
-        return new PrintingDepartment();
+        return new PrintingDepartment(new ResourceFileReader());
     }
 
     public int countAccessibleRolls(List<String> grid) {
-        return countAccessRolls.parse(grid);
+        DepertmentParser countAccessRolls = CountAccessRolls.create(grid);
+        return countAccessRolls.parse();
     }
 
     public int countAccessbleRollsFrom(String fileName) throws URISyntaxException, IOException {
         BufferedReader br = reader.read(fileName);
-        List<String> gred = readGridFrom(br);
-        return countAccessRolls.parse(gred);
+        return countAccessibleRolls(readGridFrom(br));
     }
 
-    private List<String> readGridFrom(BufferedReader br) throws IOException {
-        List<String> gred = new ArrayList<>();
-        String line;
-        while ((line = br.readLine()) != null) {
-            gred.add(line);
-        }
-        return gred;
+    private List<String> readGridFrom(BufferedReader br) {
+        return br.lines().toList();
     }
 
 }

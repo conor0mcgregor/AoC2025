@@ -17,10 +17,10 @@ public class RangesManager {
     public void addRange(long a, long b){
         Range range = new Range(a, b);
         ranges.add(range);
-        if(ranges.size() > 1) upDateRanges();
+        if(ranges.size() > 1) updateRanges();
     }
 
-    private void upDateRanges() {
+    private void updateRanges() {
         ranges.sort(Comparator.comparing(Range::a));
         for(int i =0; i < ranges.size() - 1; i++){
             examine(ranges.get(i), ranges.get(i+1), i);
@@ -34,19 +34,18 @@ public class RangesManager {
     }
 
     private boolean isUnifiable(Range range1, Range range2) {
-        return range1.b >= range2.a;
+        return range1.b() >= range2.a();
     }
 
     private void unify(Range range1, Range range2, int index) {
-        Range range = new Range(min(range1.a, range2.a), max(range1.b, range2.b));
+        Range range = new Range(min(range1.a(), range2.a()), max(range1.b(), range2.b()));
         ranges.set(index, range);
         ranges.remove(index+1);
-        upDateRanges();
+        updateRanges();
     }
 
-    public boolean isInside(long num){
-        for (Range range : ranges) { if (range.isInside(num)) return true; }
-        return false;
+    public boolean isInside(long num) {
+        return ranges.stream().anyMatch(r -> r.isInside(num));
     }
 
     public List<Range> getRanges() {
@@ -54,15 +53,9 @@ public class RangesManager {
     }
 
     public long getSizeRanges() {
-        long availableIDs = 0;
-        for(Range range : ranges){availableIDs += range.getSize();}
-        return availableIDs;
+        return ranges.stream()
+                .mapToLong(Range::getSize)
+                .sum();
     }
 
-    public record Range(long a, long b){
-        public boolean isInside(long num) {
-            return a <= num && b >= num;
-        }
-        public long getSize(){ return b - a + 1; }
-    }
 }

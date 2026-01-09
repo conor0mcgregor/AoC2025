@@ -1,42 +1,37 @@
 package software.aoc.day2.a;
 
+import software.aoc.FileReader;
+import software.aoc.ResourceFileReader;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.stream.LongStream;
 
 public class IDValidator {
+    private FileReader reader;
 
-    private IDValidator() {}
+    private IDValidator(FileReader reader) {
+        this.reader = reader;
+    }
 
-    public static IDValidator create() {return new IDValidator();}
+    public static IDValidator create() {return new IDValidator(new ResourceFileReader());}
 
     public long sumInvalidIdsFromFile(String fileName) throws URISyntaxException, IOException {
-        String content = Files.readString(stringToPath(fileName));
+        String content = reader.read(fileName).readLine();
+        return sumAllInvalidIds(content);
+    }
+
+    private long sumAllInvalidIds(String content) {
         return Arrays.stream(content.split(","))
                 .mapToLong(this::sumInvalidIdInStrRange)
                 .sum();
     }
 
-    private long sumInvalidIdInStrRange(String range) {
-        String[] intervalos = range.split("-");
-        return sumInvalidIds(stringToLong(intervalos[0]), stringToLong(intervalos[1]));
+    private long sumInvalidIdInStrRange(String rangeStr) {
+        Range range = Range.with(rangeStr);
+        return sumInvalidIds(range.a(), range.b());
     }
-
-    private Long stringToLong(String str) {
-        return Long.parseLong(str);
-    }
-
-    private Path stringToPath(String fileName) throws URISyntaxException {
-        URL url = getClass().getResource("/" + fileName);
-        if (url == null) {throw new IllegalArgumentException("Archivo no encontrado en resources: " + fileName);}
-        return Paths.get(url.toURI());
-    }
-
 
     public long sumInvalidIds(long start, long end) {
         return LongStream.rangeClosed(start, end)

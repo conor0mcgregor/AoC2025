@@ -1,6 +1,6 @@
 package software.aoc.day12.a;
 
-import software.aoc.day12.ResourceFileReader;
+import software.aoc.ResourceFileReader;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

@@ -1,6 +1,7 @@
 package software.aoc.day7.a;
 
-import software.aoc.day7.ResourceFileReader;
+import software.aoc.FileReader;
+import software.aoc.ResourceFileReader;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -8,7 +9,7 @@ import java.util.List;
 
 public class TachyonManifold {
 
-    private final ResourceFileReader reader;
+    private final FileReader reader;
 
     private TachyonManifold() {
         this.reader = new ResourceFileReader();
@@ -21,17 +22,12 @@ public class TachyonManifold {
     public int countRays(String fileName) throws URISyntaxException, IOException {
         List<String> layers = loadLayers(fileName);
 
-        int startPosition = findStartPosition(layers.getFirst());
 
-        QuantumManifold manifold = new QuantumManifold(layers);
-        return manifold.countTimelines(startPosition);
+        QuantumSimulator manifold = new QuantumSpace(layers);
+        return manifold.countTimelines();
     }
 
     private List<String> loadLayers(String fileName) throws URISyntaxException, IOException {
         return reader.read(fileName).lines().toList();
-    }
-
-    private int findStartPosition(String firstLayer) {
-        return firstLayer.indexOf('S');
     }
 }

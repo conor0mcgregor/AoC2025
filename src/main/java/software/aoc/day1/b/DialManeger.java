@@ -1,22 +1,24 @@
 package software.aoc.day1.b;
 
+import software.aoc.FileReader;
+import software.aoc.ResourceFileReader;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 
 public class DialManeger {
     private final Dial dial;
-    private DialManeger(){
+    private final FileReader reader;
+
+    private DialManeger(FileReader reader){
         this.dial = Dial.create();
+        this.reader = reader;
     }
 
     public static DialManeger create() {
-        return new DialManeger();
+        return new DialManeger(new ResourceFileReader());
     }
 
     public DialManeger ordersOfSpins(String orders) {
@@ -25,28 +27,13 @@ public class DialManeger {
     }
 
     public DialManeger ordersOfSpinsInFile(String fileName) throws IOException, URISyntaxException {
-        Path filePath = stringToPath(fileName);
-
-        BufferedReader br = Files.newBufferedReader(filePath);
+        BufferedReader br = reader.read(fileName);
         applySpinsFrom(br);
-
         return this;
     }
 
-    private void applySpinsFrom(BufferedReader br) throws IOException {
-        String line;
-        while ((line = br.readLine()) != null) {
-            spin(line);
-        }
-    }
-
-    private Path stringToPath(String fileName) throws URISyntaxException {
-        URL url = getClass().getResource("/" + fileName);
-        if (url == null) {
-            throw new IllegalArgumentException("Archivo no encontrado en resources: " + fileName);
-        }
-
-        return Paths.get(url.toURI());
+    private void applySpinsFrom(BufferedReader br) {
+        br.lines().forEach(this::spin);
     }
 
     public DialManeger spin(String turn) {

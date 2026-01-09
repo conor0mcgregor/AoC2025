@@ -2,6 +2,7 @@ package software.aoc.day1.a;
 
 public class Dial {
     private int position;
+    private int password;
 
     private Dial () {this.position = 50;}
     public static Dial create() { return new Dial();}
@@ -12,11 +13,15 @@ public class Dial {
     }
 
     public void rotate(int rotation) {
-        position = (position + rotation) % 100;
-        ajustPosition();
+        position = ((position + rotation) % 100 + 100) % 100;
+        updatePassword();
     }
 
-    private void ajustPosition() {
-        if (position < 0) position += 100;
+    private void updatePassword() {
+        if (position == 0) password++;
+    }
+
+    public int getPassword() {
+        return password;
     }
 }

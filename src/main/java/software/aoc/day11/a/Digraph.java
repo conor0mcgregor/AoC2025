@@ -2,7 +2,7 @@ package software.aoc.day11.a;
 
 import java.util.*;
 
-public class Digraph {
+public class Digraph implements PathGraph{
     private final List<Node> nodes;
     private final Map<String, Long> memo =  new HashMap<>();
 
@@ -10,6 +10,7 @@ public class Digraph {
         this.nodes = new ArrayList<>();
     }
 
+    @Override
     public void addDestNodeTo(String idOrigin, String idDest){
         Node nodeOrgin = getNode(idOrigin);
         Node nodeDest = getNode(idDest);
@@ -19,6 +20,7 @@ public class Digraph {
         addNode(nodeDest);
     }
 
+    @Override
     public void addNode(String id){
         Node node = new Node(id);
         if(! nodes.contains(node)) nodes.add(node);
@@ -45,7 +47,8 @@ public class Digraph {
         }
     }
 
-    public Long getNumPaths(String nodeOrigin, String nodeDest) {
+    @Override
+    public long getNumPaths(String nodeOrigin, String nodeDest) {
         memo.clear();
         return calculedNumPaths(nodeOrigin, nodeDest);
     }
@@ -61,10 +64,15 @@ public class Digraph {
 
         if (current == null) return 0L;
 
-        for(Node child : getNode(nodeOrigin).getDestNodes()){
-            result += getNumPaths(child.getId(), nodeDest);
-        }
+        result += getNeighborsPaths(current, nodeDest);
         memo.put(key, result);
         return result;
     }
+
+    private long getNeighborsPaths(Node nodeOrigin, String nodeDest) {
+        return nodeOrigin.getDestNodes().stream()
+                .mapToLong(n -> getNumPaths(n.getId(), nodeDest))
+                .sum();
+    }
+
 }

@@ -1,31 +1,36 @@
 package software.aoc.day6.b;
 
+import software.aoc.day6.a.ProblemSolver;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Calculator {
+public class Calculator implements ProblemSolver {
 
+    @Override
     public long solveWorksheet(List<String> lines) {
-        List<Problem> problems = parseProblems(lines);
-
-        return problems.stream().mapToLong(Problem::solve).sum();
+        return parseProblems(lines).stream()
+                .mapToLong(Problem::solve)
+                .sum();
     }
 
     private List<Problem> parseProblems(List<String> lines) {
         List<Problem> problems = new ArrayList<>();
         String operators = lines.getLast();
-        int columns = operators.length();
 
-        for (int col = 0; col < columns; col++) {
+        extractProblem(lines, operators, problems);
+
+        return problems;
+    }
+
+    private void extractProblem(List<String> lines, String operators, List<Problem> problems) {
+        for (int col = 0; col < operators.length(); col++) {
             char operator = operators.charAt(col);
             if(operator == ' ') continue;
             List<Long> numbers = extractNumbersFromColumn(lines, col);
             problems.add(new Problem(numbers, operator));
-
         }
-
-        return problems;
     }
 
     private List<Long> extractNumbersFromColumn(List<String> lines, int col) {
@@ -60,18 +65,5 @@ public class Calculator {
         return col < line.length() ? line.charAt(col) : ' ';
     }
 
-    private record Problem(List<Long> numbers, char operator) {
 
-        long solve() {
-                long result = 0;
-
-                if (operator == '+') {
-                    result = numbers.stream().mapToLong(Long::longValue).sum();
-                } else if (operator == '*') {
-                    result = numbers.stream().mapToLong(Long::longValue).reduce(1, (a, b) -> a * b);
-                }
-
-                return result;
-            }
-        }
 }

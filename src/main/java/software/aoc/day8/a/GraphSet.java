@@ -3,13 +3,14 @@ package software.aoc.day8.a;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GraphSet {
+public class GraphSet implements GraphCollection{
     private final List<Graph> graphs;
 
     public GraphSet() {
         this.graphs = new ArrayList<>();
     }
 
+    @Override
     public void addNewConnection(Node node1, Node node2){
         Graph graph1 = getGraph(node1);
         Graph graph2 = getGraph(node2);
@@ -18,7 +19,8 @@ public class GraphSet {
         joinGraphs(graph1, node1, graph2, node2);
     }
 
-    public List<Integer> sizes() {
+    @Override
+    public List<Integer> graphsSizes() {
         return graphs.stream()
                 .map(Graph::size)
                 .toList();
@@ -42,14 +44,17 @@ public class GraphSet {
                 });
     }
 
+    @Override
     public List<Graph> getGraphs() {
         return graphs;
     }
 
+    @Override
     public int lenght() {
         return graphs.size();
     }
 
+    @Override
     public void addSingleNode(Node node) {
         getGraph(node);
     }

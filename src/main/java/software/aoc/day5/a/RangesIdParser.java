@@ -5,6 +5,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public interface RangesIdParser {
-    void saveRanges(BufferedReader br, RangesManager rangesManager) throws IOException;
+    void saveRanges(BufferedReader br);
     long countFreshId(String fileName) throws URISyntaxException, IOException;
 }

@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Digraph {
+public class Digraph implements PathGraph{
     private final List<Node> nodes;
     private final Map<String, Long> memo =  new HashMap<>();
 
@@ -13,6 +13,7 @@ public class Digraph {
         this.nodes = new ArrayList<>();
     }
 
+    @Override
     public void addDestNodeTo(String idOrigin, String idDest){
         Node nodeOrgin = getNode(idOrigin);
         Node nodeDest = getNode(idDest);
@@ -22,6 +23,7 @@ public class Digraph {
         addNode(nodeDest);
     }
 
+    @Override
     public void addNode(String id){
         Node node = new Node(id);
         if(! nodes.contains(node)) nodes.add(node);
@@ -48,7 +50,8 @@ public class Digraph {
         }
     }
 
-    public Long getNumPaths(String nodeOrigin, String nodeDest) {
+    @Override
+    public long getNumPaths(String nodeOrigin, String nodeDest) {
         memo.clear();
         return calculedNumPaths(nodeOrigin, nodeDest, false, false);
     }
@@ -68,11 +71,15 @@ public class Digraph {
 
         if (current == null) return 0L;
 
-        for (Node child : current.getDestNodes()) {
-            result += calculedNumPaths(child.getId(), nodeDest, nowFFT, nowDAC);
-        }
+        result += getNeighborsPaths(nodeDest, current, nowFFT, nowDAC);
 
         memo.put(key, result);
         return result;
+    }
+
+    private long getNeighborsPaths(String nodeDest, Node current, boolean nowFFT, boolean nowDAC) {
+        return current.getDestNodes().stream()
+                .mapToLong(child -> calculedNumPaths(child.getId(), nodeDest, nowFFT, nowDAC))
+                .sum();
     }
 }

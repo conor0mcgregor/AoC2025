@@ -1,6 +1,7 @@
 package software.aoc.day6.b;
 
-import software.aoc.day6.ResourceFileReader;
+import software.aoc.FileReader;
+import software.aoc.ResourceFileReader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,7 +9,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 public class TrashCompactor {
-    ResourceFileReader reader;
+    FileReader reader;
     Calculator calculator;
 
     private TrashCompactor() {

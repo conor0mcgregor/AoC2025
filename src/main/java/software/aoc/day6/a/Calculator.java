@@ -3,41 +3,34 @@ package software.aoc.day6.a;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Calculator {
+public class Calculator implements ProblemSolver{
 
+    @Override
     public long solveWorksheet(List<String> lines) {
-        List<Problem> problems = parseProblems(lines);
-
-        long total = 0;
-        for (Problem problem : problems) {
-            long result = problem.solve();
-            total += result;
-        }
-
-        return total;
+        return parseProblems(lines).stream()
+                .mapToLong(Problem::solve)
+                .sum();
     }
 
     private List<Problem> parseProblems(List<String> lines) {
         List<Problem> problems = new ArrayList<>();
 
         String[] operators = lines.getLast().trim().split("\\s+");
-        int columns =operators.length;
 
-        // Recorrer columna por columna
-        for (int col = 0; col < columns; col++) {
-            char operator = operators[col].charAt(0);
-
-            List<Long> numbers = extractNumbersFromColumn(lines, col);
-            problems.add(new Problem(numbers, operator));
-
-        }
+        extractProblems(lines, operators, problems);
 
         return problems;
     }
 
-    /**
-     * Extrae los números de una columna específica.
-     */
+    private void extractProblems(List<String> lines, String[] operators, List<Problem> problems) {
+        for (int col = 0; col < operators.length; col++) {
+            char operator = operators[col].charAt(0);
+
+            List<Long> numbers = extractNumbersFromColumn(lines, col);
+            problems.add(new Problem(numbers, operator));
+        }
+    }
+
     private List<Long> extractNumbersFromColumn(List<String> lines, int col) {
         List<Long> numbers = new ArrayList<>();
 
@@ -57,27 +50,5 @@ public class Calculator {
         return line.trim().split("\\s+")[col];
     }
 
-    private static class Problem {
-        private final List<Long> numbers;
-        private final char operator;
 
-        Problem(List<Long> numbers, char operator) {
-            this.numbers = numbers;
-            this.operator = operator;
-        }
-
-        long solve() {
-            long result = 0;
-
-            if (operator == '+') {
-                result = numbers.stream().mapToLong(Long::longValue).sum();
-            } else if (operator == '*') {
-                result = numbers.stream()
-                        .mapToLong(Long::longValue)
-                        .reduce(1L, (a, b) -> a * b);
-            }
-
-            return result;
-        }
-    }
 }

@@ -1,5 +1,8 @@
 package software.aoc.day3.b;
 
+import software.aoc.FileReader;
+import software.aoc.ResourceFileReader;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -36,13 +39,8 @@ public class BatteryBank {
     }
 
     private long calculateTotalJoltage(BufferedReader reader) throws IOException {
-        long total = 0;
-        String line;
-        
-        while ((line = reader.readLine()) != null) {
-            total += batteryParser.parse(line);
-        }
-        
-        return total;
+        return reader.lines()
+                .mapToLong(batteryParser::parse)
+                .sum();
     }
 }

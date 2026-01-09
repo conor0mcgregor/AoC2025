@@ -1,6 +1,7 @@
 package software.aoc.day5.b;
 
-import software.aoc.day5.ResourceFileReader;
+import software.aoc.FileReader;
+import software.aoc.ResourceFileReader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,52 +9,50 @@ import java.net.URISyntaxException;
 
 public class CounterFreshId implements RangesIdParser {
 
-    private final ResourceFileReader reader;
+    private final FileReader reader;
+    private final RangesManager rangesManager;
 
     private CounterFreshId() {
         this.reader = new ResourceFileReader();
+        this.rangesManager = new RangesManager();
     }
 
     public static CounterFreshId create() {
         return new CounterFreshId();
     }
 
-
-
     @Override
-    public void saveRanges(BufferedReader br, RangesManager rangesManager) throws IOException {
-        String line;
-        while ((line = br.readLine()) != null) {
-            if(line.isEmpty()) return;
-            String[] parts = line.split("-");
-            long a = Long.parseLong(parts[0]);
-            long b = Long.parseLong(parts[1]);
-            rangesManager.addRange(a, b);
-        }
+    public void saveRanges(BufferedReader br) {
+        br.lines()
+                .takeWhile(line -> !line.isEmpty())
+                .forEach(this::saveRange);
+    }
+
+    private void saveRange(String line) {
+        String[] parts = line.split("-");
+        long a = Long.parseLong(parts[0]);
+        long b = Long.parseLong(parts[1]);
+        rangesManager.addRange(a, b);
     }
 
     @Override
     public long countFreshId(String fileName) throws URISyntaxException, IOException {
-        RangesManager rangesManager = new RangesManager();
         BufferedReader br = reader.read(fileName);
-        saveRanges(br, rangesManager);
-        return verifyIds(rangesManager, br);
+        saveRanges(br);
+        return verifyIds(br);
     }
 
     @Override
     public long getAvailableIDs(String fileName) throws IOException, URISyntaxException {
-        RangesManager rangesManager = new RangesManager();
         BufferedReader br = reader.read(fileName);
-        saveRanges(br, rangesManager);
+        saveRanges(br);
         return rangesManager.getSizeRanges();
     }
 
-    private long verifyIds(RangesManager rangesManager, BufferedReader br) throws IOException {
-        String line;
-        long counter = 0;
-        while ((line = br.readLine()) != null){
-            if(rangesManager.isInside(Long.parseLong(line))) counter++;
-        }
-        return counter;
+    private long verifyIds(BufferedReader br) {
+        return br.lines()
+                .mapToLong(Long::parseLong)
+                .filter(rangesManager::isInside)
+                .count();
     }
 }

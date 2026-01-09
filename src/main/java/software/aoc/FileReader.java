@@ -1,4 +1,4 @@
-package software.aoc.day3.b;
+package software.aoc;
 
 import java.io.BufferedReader;
 import java.io.IOException;
