@@ -2,10 +2,6 @@ package software.aoc.day12.a;
 
 import java.util.List;
 
-/**
- * Responsible for packing presents into a rectangular area.
- * Uses a backtracking algorithm to determine if all presents fit.
- */
 public class PresentPacker {
 
     private final int width;
@@ -19,25 +15,19 @@ public class PresentPacker {
         this.height = height;
     }
 
-    /**
-     * Checks if all presents can fit in the available area.
-     */
     public boolean canFitAllPresents(List<Present> presentsToFit) {
         if (presentsToFit.isEmpty()) {
             return true;
         }
 
-        // Quick check: total pixels
         if (!hasEnoughPixels(presentsToFit)) {
             return false;
         }
 
-        // Optimistic check: based on max dimensions
         if (fitsWithOptimisticEstimate(presentsToFit)) {
             return true;
         }
 
-        // Full backtracking algorithm
         boolean[][] area = new boolean[height][width];
         return tryPlaceAllPresents(area, presentsToFit, 0);
     }
@@ -65,17 +55,14 @@ public class PresentPacker {
         return presents.size() <= slotsAvailable;
     }
 
-    /**
-     * Recursive backtracking to place presents.
-     */
+
     private boolean tryPlaceAllPresents(boolean[][] area, List<Present> presents, int index) {
         if (index >= presents.size()) {
-            return true; // All presents placed successfully
+            return true;
         }
 
         Present present = presents.get(index);
 
-        // Try each rotation of the present
         for (Shape shape : present.shapeRotations()) {
             if (tryPlaceShape(area, shape, presents, index)) {
                 return true;
@@ -89,22 +76,16 @@ public class PresentPacker {
         int maxCol = width - shape.width();
         int maxRow = height - shape.height();
 
-        // Try each position
         for (int row = 0; row <= maxRow; row++) {
             for (int col = 0; col <= maxCol; col++) {
                 if (canPlaceAt(area, shape, col, row)) {
-                    // Create a copy of the area
                     boolean[][] newArea = cloneArea(area);
 
-                    // Place the shape
                     placeShapeAt(newArea, shape, col, row);
 
-                    // Try to place remaining presents
                     if (tryPlaceAllPresents(newArea, presents, index + 1)) {
                         return true;
                     }
-
-                    // Backtrack (implicit - we don't modify original area)
                 }
             }
         }
@@ -116,7 +97,7 @@ public class PresentPacker {
         for (int row = 0; row < shape.height(); row++) {
             for (int col = 0; col < shape.width(); col++) {
                 if (shape.parts()[row][col] && area[startRow + row][startCol + col]) {
-                    return false; // Overlap detected
+                    return false;
                 }
             }
         }
