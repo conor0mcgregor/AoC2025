@@ -11,32 +11,37 @@ import java.util.stream.Stream;
 
 public class Reactor {
     private final FileReader reader;
+    private PathGraph digraph;
 
-    public Reactor() {
+    private Reactor() {
         this.reader = new ResourceFileReader();
     }
 
+    public static Reactor create() {
+        return new Reactor();
+    }
+
     public long countPaths(String fileName) throws URISyntaxException, IOException {
-        Digraph digraph = parserPaths(fileName);
+        parserPaths(fileName);
         return digraph.getNumPaths("svr", "out");
     }
     public long countPaths(List<String> dates){
-        Digraph digraph = buildGraph(dates.stream());
+        buildGraph(dates.stream());
         return digraph.getNumPaths("svr", "out");
     }
 
-    private Digraph parserPaths(String fileName) throws URISyntaxException, IOException {
+    private void parserPaths(String fileName) throws URISyntaxException, IOException {
         BufferedReader br = reader.read(fileName);
-        return buildGraph(br.lines());
+        buildGraph(br.lines());
     }
 
-    private Digraph buildGraph(Stream<String> lines) {
-        Digraph digraph = new Digraph();
+    private void buildGraph(Stream<String> lines) {
+        PathGraph digraph = new Digraph();
         lines.forEach(line -> parserNodes(digraph, line));
-        return digraph;
+        this.digraph = digraph;
     }
 
-    private void parserNodes(Digraph digraph, String line) {
+    private void parserNodes(PathGraph digraph, String line) {
         String idOrigin = line.split(": ")[0];
         String[] idsDest = line.split(": ")[1].split(" ");
         digraph.addDestsNodes(idOrigin, idsDest);

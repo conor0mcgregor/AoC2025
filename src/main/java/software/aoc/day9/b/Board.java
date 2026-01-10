@@ -4,7 +4,7 @@ import java.util.*;
 
 import static java.lang.Math.abs;
 
-public class Board {
+public class Board implements Map {
 
     private final List<Point> redTiles;
     private final List<Integer> xMap = new ArrayList<>();
@@ -144,22 +144,15 @@ public class Board {
         }
     }
 
-    private boolean isValidRect(int x1, int y1, int x2, int y2) {
-        int ix1 = getXIndex(Math.min(x1, x2));
-        int ix2 = getXIndex(Math.max(x1, x2));
-        int iy1 = getYIndex(Math.min(y1, y2));
-        int iy2 = getYIndex(Math.max(y1, y2));
-
-        int invalidCount =
-                prefixSum[iy2 + 1][ix2 + 1]
-                        - prefixSum[iy1][ix2 + 1]
-                        - prefixSum[iy2 + 1][ix1]
-                        + prefixSum[iy1][ix1];
-
-        return invalidCount == 0;
+    private static long getAreaOf(Point p1, Point p2) {
+        long width = Math.abs((long) p1.x() - p2.x()) + 1;
+        long height = Math.abs((long) p1.y() - p2.y()) + 1;
+        long area = width * height;
+        return area;
     }
 
-    public long getMaxRect() {
+    @Override
+    public long getBigerRectangle() {
         long maxArea = 0;
         int n = redTiles.size();
 
@@ -179,10 +172,23 @@ public class Board {
         return maxArea;
     }
 
-    private static long getAreaOf(Point p1, Point p2) {
-        long width = Math.abs((long) p1.x() - p2.x()) + 1;
-        long height = Math.abs((long) p1.y() - p2.y()) + 1;
-        long area = width * height;
-        return area;
+    private boolean isValidRect(int x1, int y1, int x2, int y2) {
+        int invalidCount = countExitTitles(x1, y1, x2, y2);
+        return invalidCount == 0;
     }
+
+    private int countExitTitles(int x1, int y1, int x2, int y2) {
+        int ix1 = getXIndex(Math.min(x1, x2));
+        int ix2 = getXIndex(Math.max(x1, x2));
+        int iy1 = getYIndex(Math.min(y1, y2));
+        int iy2 = getYIndex(Math.max(y1, y2));
+
+        int invalidCount =
+                prefixSum[iy2 + 1][ix2 + 1]
+                        - prefixSum[iy1][ix2 + 1]
+                        - prefixSum[iy2 + 1][ix1]
+                        + prefixSum[iy1][ix1];
+        return invalidCount;
+    }
+
 }

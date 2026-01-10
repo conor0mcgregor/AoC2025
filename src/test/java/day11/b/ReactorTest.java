@@ -13,14 +13,14 @@ public class ReactorTest {
 
     @Test
     void should_find_the_correct_number_of_paths() throws URISyntaxException, IOException {
-        Reactor reactor = new Reactor();
+        Reactor reactor = Reactor.create();
         long result = reactor.countPaths("day11/b/file1.txt");
         assertThat(result).isEqualTo(2);
     }
 
     @Test
     void should_return_only_one_paths(){
-        Reactor reactor = new Reactor();
+        Reactor reactor = Reactor.create();
         long result = reactor.countPaths(List.of(
                 "svr: dac",
                 "dac: fft",
@@ -30,7 +30,7 @@ public class ReactorTest {
     }
     @Test
     void should_return_zero_paths(){
-        Reactor reactor = new Reactor();
+        Reactor reactor = Reactor.create();
         long result = reactor.countPaths(List.of(
                 "svr: dac",
                 "svr: fft",
@@ -41,7 +41,7 @@ public class ReactorTest {
     }
     @Test
     void should_return_two_paths(){
-        Reactor reactor = new Reactor();
+        Reactor reactor = Reactor.create();
         long result = reactor.countPaths(List.of(
                 "svr: dac",
                 "dac: fft",

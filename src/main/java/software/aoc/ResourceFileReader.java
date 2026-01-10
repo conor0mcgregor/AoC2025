@@ -2,6 +2,7 @@ package software.aoc;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -18,11 +19,15 @@ public class ResourceFileReader implements FileReader {
 
     private Path resolveResourcePath(String fileName) throws URISyntaxException {
         URL url = getClass().getResource("/" + fileName);
-        
         if (url == null) {
             throw new IllegalArgumentException("File not found in resources: " + fileName);
         }
-        
         return Paths.get(url.toURI());
+    }
+
+    @Override
+    public BufferedReader StringToBR(String dates){
+        return new BufferedReader(new StringReader(dates));
+
     }
 }

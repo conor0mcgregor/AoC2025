@@ -11,29 +11,31 @@ import java.util.stream.Stream;
 
 public class Reactor {
     private final FileReader reader;
+    private PathGraph digraph;
 
-    public Reactor() {
+    private Reactor() {
         this.reader = new ResourceFileReader();
     }
+    public static Reactor create() { return new Reactor(); }
 
     public long countPaths(String fileName) throws URISyntaxException, IOException {
-        Digraph digraph = parserPaths(fileName);
+        parserPaths(fileName);
         return digraph.getNumPaths("you", "out");
     }
     public long countPaths(List<String> dates){
-        Digraph digraph = buildGraph(dates.stream());
+        buildGraph(dates.stream());
         return digraph.getNumPaths("you", "out");
     }
 
-    private Digraph parserPaths(String fileName) throws URISyntaxException, IOException {
+    private void parserPaths(String fileName) throws URISyntaxException, IOException {
         BufferedReader br = reader.read(fileName);
-        return buildGraph(br.lines());
+        buildGraph(br.lines());
     }
 
-    private Digraph buildGraph(Stream<String> lines) {
+    private void buildGraph(Stream<String> lines) {
         Digraph digraph = new Digraph();
         lines.forEach(line -> parserNodes(digraph, line));
-        return digraph;
+        this.digraph = digraph;
     }
 
     private void parserNodes(Digraph digraph, String line) {

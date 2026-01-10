@@ -57,6 +57,8 @@ La estructura granular de las clases sugiere un enfoque TDD, donde las piezas fu
     * Uso de `record Point` dentro de `Node`. Inmutable y definido por sus atributos coordenadas.
 * **Comparable Interface:**
     * `Edge` implementa `Comparable<Edge>`. Esto permite usar `Collections.sort()` o `stream().sorted()` de forma natural, delegando la lógica de comparación a la propia clase (patrón experto).
+* **Static Factory Method:**
+    * `JunctionBoxes.create()` encapsula la creación del objeto y sus dependencias internas.
 
 ---
 

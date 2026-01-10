@@ -6,4 +6,5 @@ import java.net.URISyntaxException;
 
 public interface FileReader {
     BufferedReader read(String fileName) throws URISyntaxException, IOException;
+    BufferedReader StringToBR(String dates);
 }

@@ -1,5 +1,6 @@
 package software.aoc.day9.a;
 
+import software.aoc.FileReader;
 import software.aoc.ResourceFileReader;
 
 import java.io.BufferedReader;
@@ -8,7 +9,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 public class CinemaSolver {
-    private final ResourceFileReader reader;
+    private final FileReader reader;
 
     private CinemaSolver() {
         this.reader = new ResourceFileReader();
@@ -19,21 +20,13 @@ public class CinemaSolver {
     }
 
     public long findMaxRectangle(String fileName) throws URISyntaxException, IOException {
-        List<Point> points = extractPoints(fileName);
-        Board board = new Board(points);
-        return board.getBigerRectangle();
+        return findMaxRectangle(reader.read(fileName).readAllLines());
     }
 
-    public long findMaxRectangle(List<String> listPoints) throws URISyntaxException, IOException {
+    public long findMaxRectangle(List<String> listPoints) {
         List<Point> points = extractPoints(listPoints);
-        Board board = new Board(points);
+        Map board = new Board(points);
         return board.getBigerRectangle();
-    }
-
-
-    private List<Point> extractPoints(String fileName) throws URISyntaxException, IOException {
-        BufferedReader br = reader.read(fileName);
-        return br.lines().map(this::stringToPoint).toList();
     }
 
     private List<Point> extractPoints(List<String> listPoints) {

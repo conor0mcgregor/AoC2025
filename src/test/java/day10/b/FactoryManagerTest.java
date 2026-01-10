@@ -13,7 +13,7 @@ public class FactoryManagerTest {
     @Test
     void should_return_the_sum_from_the_example_correctly() throws URISyntaxException, IOException {
         FactoryManager factoryManager = FactoryManager.create();
-        long result = factoryManager.getSumMinPulsesFromFile("day10/file1.txt");
+        long result = factoryManager.getSumMinPulsesFrom("day10/file1.txt");
         assertThat(result).isEqualTo(33);
     }
 
@@ -25,7 +25,7 @@ public class FactoryManagerTest {
             [####] (0) (1) {1,5}
             """;
 
-        long result = factoryManager.getSumMinPulsesFrom(machines);
+        long result = factoryManager.getSumMinPulses(machines);
         assertThat(result).isEqualTo(6);
     }
     @Test
@@ -127,7 +127,7 @@ public class FactoryManagerTest {
             
             """;
 
-        long result = factoryManager.getSumMinPulsesFrom(machines);
+        long result = factoryManager.getSumMinPulses(machines);
         assertThat(result).isEqualTo(6);
     }
 
@@ -139,7 +139,7 @@ public class FactoryManagerTest {
             [.] (0) {1}
             """;
 
-        long result = factoryManager.getSumMinPulsesFrom(machines);
+        long result = factoryManager.getSumMinPulses(machines);
         assertThat(result).isEqualTo(1);
     }
 
@@ -151,7 +151,7 @@ public class FactoryManagerTest {
             [.#] (0) (0) (0) {1}
             """;
 
-        long result = factoryManager.getSumMinPulsesFrom(machines);
+        long result = factoryManager.getSumMinPulses(machines);
         assertThat(result).isEqualTo(1);
     }
 
@@ -163,7 +163,7 @@ public class FactoryManagerTest {
             [....] (0) (1) {2,5}
             """;
 
-        long result = factoryManager.getSumMinPulsesFrom(machines);
+        long result = factoryManager.getSumMinPulses(machines);
         assertThat(result).isEqualTo(7);
     }
 

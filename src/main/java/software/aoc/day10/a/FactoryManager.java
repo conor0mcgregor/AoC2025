@@ -1,16 +1,16 @@
 package software.aoc.day10.a;
 
-import software.aoc.day10.ResourceFileReader;
+import software.aoc.FileReader;
+import software.aoc.ResourceFileReader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Arrays;
 
 import static java.lang.Math.max;
 
 public class FactoryManager {
-    private final ResourceFileReader reader;
+    private final FileReader reader;
 
     private FactoryManager() {
         this.reader = new ResourceFileReader();
@@ -30,23 +30,15 @@ public class FactoryManager {
     }
 
     private long parserDates(BufferedReader dates) throws IOException {
-        long result = 0;
-        String line;
-        while ((line = dates.readLine()) != null){
-            result += calculateMinPulses(line);
-        }
-        return result;
+        return dates.lines()
+                .mapToLong(this::calculateMinPulses)
+                .sum();
     }
 
     private long calculateMinPulses(String machine) {
         String[] machineDates = machine.split(" ");
-        String stateDest = machineDates[0].substring(1, machineDates[0].length() - 1);
-        String[] buttons = Arrays.copyOfRange(machineDates, 1, machineDates.length - 1);
-        String voltage = machineDates[machineDates.length - 1];
-
-        NaryTree naryTree = new NaryTree(stateDest.length());
-
-        return naryTree.getShortestPath(stateDest, buttons);
+        PushCalculator pushCalculator = new StateCalculator(machineDates);
+        return pushCalculator.getMinPushForState();
     }
 
 
