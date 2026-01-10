@@ -1,7 +1,5 @@
 package software.aoc.day6.b;
 
-import software.aoc.day6.a.ProblemSolver;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,7 +53,7 @@ public class Calculator implements ProblemSolver {
 
     private String extractNumberEndingAt(List<String> lines, int col) {
         return lines.stream()
-                .limit(lines.size() - 1) // Excluir última fila (operadores)
+                .limit(lines.size() - 1)
                 .map(line -> getCharAt(line, col))
                 .map(String::valueOf)
                 .collect(Collectors.joining());

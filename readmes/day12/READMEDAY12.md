@@ -14,12 +14,8 @@ Las reglas son:
 * Para cada región, el objetivo es determinar si existe al menos una disposición válida que permita colocar exactamente todos los regalos requeridos cumpliendo las reglas.
 ---
 ## 1. Metodología: Test Driven Development (TDD)
-
-La estructura del código revela un enfoque TDD, construyendo la solución desde la geometría básica hasta el algoritmo de búsqueda:
-
-* **Geometría Aislada (`Shape`):** Las operaciones de manipulación de matrices (`rotateRight`, `flipHorizontally`) son funciones puras dentro del record `Shape`. Esto permite probar rotaciones y reflexiones sin necesidad de lógica de empaquetado.
-* **Pre-cálculo de Variantes (`Present`):** La clase `Present` se encarga de generar y cachear todas las posibles orientaciones de un regalo al momento de la creación. Esto simplifica los tests del empaquetador, ya que este último solo recibe una lista de formas válidas y no necesita calcularlas.
-* **Algoritmo Verificable (`PresentPacker`):** La lógica de colocación (`canFitAllPresents`) está desacoplada de los datos del problema. Se puede instanciar un `PresentPacker` con dimensiones pequeñas (ej. 3x3) y probar colisiones manualmente antes de integrar el parsing de archivos.
+El problema se resolvió utilizando un enfoque **TDD**, lo cual se refleja directamente en la estructura del código resultante.
+Primero se definieron los test y a partir de ellos la creacion de codigo para poder pasar dichos tests
 
 ---
 

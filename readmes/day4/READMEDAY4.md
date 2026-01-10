@@ -10,15 +10,8 @@ En la segunda parte, el proceso se vuelve iterativo: cada rollo accesible puede 
 ---
 
 ## 1. Metodología: Test Driven Development (TDD)
-
-El enfoque TDD es evidente en la separación de responsabilidades:
-
-* **Testabilidad de la Simulación:** La clase `CounterAccessRolls` no depende del sistema de archivos. Recibe un `List<String>` en su método de fábrica `create`. Esto permite escribir tests unitarios con grillas pequeñas (ej. 3x3) definidas en código para verificar casos específicos:
-    * Rolls aislados (0 vecinos).
-    * Rolls bloqueados (4+ vecinos).
-    * Reacción en cadena (al eliminar uno, se desbloquea otro).
-* **Aislamiento de I/O:** `PrintingDepartment` maneja la lectura del archivo y la transformación a lista, delegando la lógica compleja al parser.
-
+El problema se resolvió utilizando un enfoque TDD, lo cual se refleja directamente en la estructura del código resultante. Primero se definieron los test y a partir de ellos la creacion de codigo para poder pasar dichos tests
+.
 ---
 
 ## Flujo de Ejecución
@@ -45,7 +38,7 @@ El enfoque TDD es evidente en la separación de responsabilidades:
 * `PrintingDepartment` depende de la interfaz `DepartmentParser`. Si mañana la regla cambia (ej. "contar solo los que tienen 8 vecinos"), se puede implementar una nueva clase `StrictAccessParser` sin modificar la clase orquestadora.
 
 ### D - Dependency Inversion Principle (DIP)
-* **Acierto:** `PrintingDepartment` usa la abstracción `FileReader` como atributo.
+* `PrintingDepartment` usa la abstracción `FileReader` como atributo y la abstracion DepartmentParser.
 ---
 
 ## 3. Patrones de Diseño

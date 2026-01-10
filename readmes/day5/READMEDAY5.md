@@ -10,14 +10,8 @@ En la segunda parte se ignora la lista de IDs disponibles y se trabaja únicamen
 ---
 
 ## 1. Metodología: Test Driven Development (TDD)
-
-El diseño muestra claros signos de un desarrollo evolutivo guiado por pruebas:
-
-* **Lógica de Negocio Aislada:** La clase `RangesManager` contiene la lógica compleja de fusión de intervalos (`unify`, `isUnifiable`). Al no depender de I/O ni de librerías externas, permite tests unitarios exhaustivos para casos críticos:
-    * Fusión de rangos solapados (`[1-5], [4-8]` -> `[1-8]`).
-    * Fusión de rangos adyacentes o contenidos.
-    * Ordenamiento correcto de intervalos desordenados.
-* **Record para Datos:** El uso de `Range` como un *Java Record* facilita la creación de datos de prueba inmutables y predecibles.
+El problema se resolvió utilizando un enfoque **TDD**, lo cual se refleja directamente en la estructura del código resultante.
+Primero se definieron los test y a partir de ellos la creacion de codigo para poder pasar dichos tests
 
 ---
 

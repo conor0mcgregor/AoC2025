@@ -9,13 +9,10 @@ En la segunda parte, el problema se amplía a buscar rutas desde un nuevo dispos
 
 ---
 ## 1. Metodología: Test Driven Development (TDD)
+El problema se resolvió utilizando un enfoque **TDD**, lo cual se refleja directamente en la estructura del código resultante.
+Primero se definieron los test y a partir de ellos la creacion de codigo para poder pasar dichos tests
 
-El diseño del sistema muestra una clara separación que facilita TDD:
-
-* **Aislamiento de la Estructura de Datos:** La clase `Digraph` puede ser instanciada y poblada manualmente mediante `addDestNodeTo` sin depender de un archivo de entrada. Esto permite crear tests unitarios con grafos pequeños y controlados para verificar la lógica de conexión.
-* **Verificación de Lógica de Negocio:** El método `getNumPaths` contiene la lógica compleja (pasar por "fft" y "dac"). Al estar desacoplado del parser, se pueden escribir tests que afirmen: "Dada una ruta A->fft->B->dac->C, el resultado debe ser 1".
-* **Parsing Independiente:** `Reactor` puede aceptar una `List<String>`, permitiendo probar la lógica de interpretación de texto sin I/O real.
-
+---
 ---
 
 ## Flujo de Ejecución

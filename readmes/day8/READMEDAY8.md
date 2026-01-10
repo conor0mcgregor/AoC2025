@@ -9,12 +9,8 @@ En la segunda parte, el proceso de conexión continúa hasta que todas las cajas
 ---
 
 ## 1. Metodología: Test Driven Development (TDD)
-
-La estructura granular de las clases sugiere un enfoque TDD, donde las piezas fundamentales se construyeron y probaron antes de la integración:
-
-* **Matemática Aislada (`Edge`):** La lógica de cálculo de distancias en 3D y la comparabilidad (Sorting) se encapsulan en `Edge`. Esto permite probar que la ordenación de aristas funciona correctamente sin necesidad de crear grafos complejos.
-* **Gestión de Estado (`GraphSet`):** La lógica de unir dos grafos separados (`joinGraphs`) o detectar si dos nodos ya están conectados es propensa a errores. Al aislarla en `GraphSet` (que actúa como una estructura de datos de conjuntos disjuntos), se facilita la prueba unitaria de la fusión de clústeres.
-* **Integración (`JunctionBoxes`):** Finalmente, la clase principal solo coordina la lectura y la aplicación de reglas (parar al tener 1 grafo o limitar conexiones), confiando en que la lógica de bajo nivel ya funciona.
+El problema se resolvió utilizando un enfoque **TDD**, lo cual se refleja directamente en la estructura del código resultante.
+Primero se definieron los test y a partir de ellos la creacion de codigo para poder pasar dichos tests
 
 ---
 

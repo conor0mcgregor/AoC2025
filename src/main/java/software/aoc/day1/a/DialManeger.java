@@ -33,11 +33,8 @@ public class DialManeger {
         return getPosition();
     }
 
-    private void applySpinsFrom(BufferedReader br) throws IOException {
-        String line;
-        while ((line = br.readLine()) != null) {
-            spin(line);
-        }
+    private void applySpinsFrom(BufferedReader br){
+        br.lines().forEach(this::spin);
     }
 
     public int spin(String turn) {

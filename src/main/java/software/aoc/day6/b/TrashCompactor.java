@@ -10,7 +10,7 @@ import java.util.List;
 
 public class TrashCompactor {
     FileReader reader;
-    Calculator calculator;
+    ProblemSolver calculator;
 
     private TrashCompactor() {
         this.reader = new ResourceFileReader();

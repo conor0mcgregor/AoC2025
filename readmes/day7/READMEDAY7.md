@@ -8,11 +8,8 @@ reto B)
 En la segunda parte, el comportamiento se interpreta de forma cuántica: un único taquión recorre simultáneamente todas las rutas posibles del diagrama. Cada divisor genera una bifurcación temporal, creando múltiples líneas de tiempo independientes. El objetivo ya no es contar divisiones, sino calcular cuántas líneas de tiempo distintas existen al finalizar todos los recorridos posibles. El reto se centra en el conteo combinatorio de caminos dentro de la estructura del diagrama.
 ---
 ## 1. Metodología: Test Driven Development (TDD)
-
-El diseño modular facilita un enfoque TDD, aislando la lógica computacionalmente intensiva:
-
-* **Testabilidad de la Lógica Cuántica:** La clase `QuantumSpace` recibe la grilla (`List<String>`) directamente en su constructor. Esto permite probar el algoritmo de búsqueda de rutas con escenarios controlados (ej. callejones sin salida, espacios abiertos, obstáculos) sin depender de archivos externos.
-* **Separación de Preocupaciones:** La validación de límites y la lógica de movimiento (`getResult`) están separadas, permitiendo tests granulares sobre cómo se comporta una "partícula" o "línea de tiempo" en una coordenada específica.
+El problema se resolvió utilizando un enfoque **TDD**, lo cual se refleja directamente en la estructura del código resultante.
+Primero se definieron los test y a partir de ellos la creacion de codigo para poder pasar dichos tests
 
 ---
 

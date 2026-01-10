@@ -17,21 +17,16 @@ public class LinearSystemsOptimizer {
         int numVariables = matriz[0].length;
         int numRestricciones = matriz.length;
 
-        // Función objetivo: minimizar x1 + x2 + x3 + ... + xn
         LinearObjectiveFunction funcionObjetivo = getLinearObjectiveFunction(numVariables);
 
-        // Restricciones: Ax = independentTerms
         Collection<LinearConstraint> restricciones = new ArrayList<>();
 
         restrictIndependentTerms(matriz, independentTerms, numRestricciones, numVariables, restricciones);
 
-        // Restricción de no negatividad: xi >= 0
         restrictNegative(numVariables, restricciones);
 
-        // Resolver el problema de optimización
         PointValuePair solucion = getPointValuePair(funcionObjetivo, restricciones);
 
-        // Convertir double[] a int[]
         return doublesToInts(solucion, numVariables);
     }
 
@@ -51,7 +46,6 @@ public class LinearSystemsOptimizer {
                 coeficientes[j] = matriz[i][j];
             }
 
-            // Para igualdad Ax = independentTerms, añadimos dos restricciones: Ax >= independentTerms y Ax <= independentTerms
             restricciones.add(new LinearConstraint(coeficientes, Relationship.GEQ, independentTerms[i]));
             restricciones.add(new LinearConstraint(coeficientes, Relationship.LEQ, independentTerms[i]));
         }

@@ -74,4 +74,5 @@ public class MaxJoltageParser implements BatteryParser {
             this.index = index;
         }
     }
+
 }

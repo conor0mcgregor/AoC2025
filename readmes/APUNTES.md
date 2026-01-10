@@ -104,4 +104,80 @@ Esto permite cambiar detalles técnicos sin afectar a la lógica principal.
 - Reduce dependencias rígidas
 
 ---
+Aquí está el documento simplificado:
+
+---
+# Patrones de diseño
+
+## 🏭 Static Factory Method
+
+**Descripción:** Patrón creacional que utiliza un método estático para crear instancias de una clase en lugar de exponer directamente sus constructores, permitiendo nombres significativos que describan la intención de la creación.  
+**Ejemplo:** `DialManager.create();`
+
+---
+
+## 🔗 Fluent Interface (Method Chaining)
+
+**Descripción:** Patrón que permite encadenar llamadas a métodos devolviendo el propio objeto (`this`), creando una API más expresiva y declarativa cercana al lenguaje natural.  
+**Ejemplo:** `order.addItem().setPrice().confirm();`
+
+---
+
+## 🪟 Facade (Fachada)
+
+**Descripción:** Patrón que proporciona una interfaz simple y unificada para acceder a un conjunto de subsistemas más complejos, permitiendo que el cliente interactúe únicamente con la fachada sin conocer la complejidad interna.  
+**Ejemplo:** `DialManager`
+
+---
+
+## 💎 Value Object
+
+**Descripción:** Patrón que representa un concepto del dominio mediante un objeto **inmutable**, cuya identidad se define por sus valores y no por una referencia.  
+**Ejemplo:** `record Money(amount, currency)`
+
+## 🧙‍♂️ Object Mother / Result Object (Inner Class)
+
+**Descripción:** Patrón que ayuda a **crear objetos de prueba complejos** de forma sencilla (Object Mother) o encapsula resultados y errores dentro de una clase interna (Result Object).  
+**Ejemplo:** `UserMother.createAdminUser();` / `OperationResult.success(data)`
+
+---
+
+## 🎯 Strategy Pattern
+
+**Descripción:** Patrón de comportamiento que define una **familia de algoritmos**, encapsula cada uno y los hace intercambiables, permitiendo que el algoritmo varíe independientemente del cliente.  
+**Ejemplo:** `payment.setStrategy(new CreditCardPayment()).pay();`
+
+## 🔄 Simulation / State Loop
+
+**Descripción:** Patrón que organiza la ejecución de una simulación o sistema en **estados discretos**, iterando en un bucle principal que actualiza el estado y la lógica del sistema de manera controlada.  
+**Ejemplo:**
+```
+while(simulation.isRunning()) {
+    simulation.updateState();
+    simulation.render();
+}
+```
+## 🛠️ Command Pattern (Variación)
+
+**Descripción:** Patrón de comportamiento que encapsula una **acción como objeto**, permitiendo parametrizar clientes con diferentes operaciones, almacenar historial o deshacer/rehacer acciones.  
+**Ejemplo:**
+```
+Command save = new SaveCommand(document);
+editor.executeCommand(save);
+```
+## 🧠 Memoization (Dynamic Programming)
+
+**Descripción:** Técnica que almacena los resultados de funciones costosas para **reutilizarlos en llamadas futuras**, evitando cálculos repetidos y mejorando el rendimiento.  
+**Ejemplo:**
+```java
+Map<Integer, Integer> cache = new HashMap<>();
+
+int fib(int n) {
+    if (cache.containsKey(n)) return cache.get(n);
+    int result = (n <= 1) ? n : fib(n-1) + fib(n-2);
+    cache.put(n, result);
+    return result;
+}
+```
+
 

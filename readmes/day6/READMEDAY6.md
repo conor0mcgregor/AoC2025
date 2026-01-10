@@ -9,12 +9,8 @@ En la segunda parte cambia la forma de lectura: los problemas deben interpretars
 
 ---
 ## 1. Metodología: Test Driven Development (TDD)
-
-La estructura del código revela un enfoque incremental típico de TDD:
-
-* **Lógica Atómica (`Problem`):** Se ha aislado la lógica matemática básica (sumar vs multiplicar) en un `record` Java. Esto permite probar la resolución de una operación individual sin necesidad de parsear texto ni leer archivos.
-* **Parsing Desacoplado (`Calculator`):** La lógica de extracción de números desde una grilla de texto (`extractNumbersFromColumn`) es compleja. Al estar en `Calculator` y recibir una `List<String>`, se pueden escribir tests que pasen grillas simuladas en memoria para verificar que los números verticales se leen correctamente.
-* **Integración (`TrashCompactor`):** Finalmente, se conecta la lectura de archivos con el calculador.
+El problema se resolvió utilizando un enfoque **TDD**, lo cual se refleja directamente en la estructura del código resultante.
+Primero se definieron los test y a partir de ellos la creacion de codigo para poder pasar dichos tests
 
 ---
 
@@ -46,7 +42,7 @@ La estructura del código revela un enfoque incremental típico de TDD:
 * **Interfaces:** `TrashCompactor` utiliza `Calculator`, pero este implementa la interfaz `ProblemSolver`. Esto permite cambiar la implementación del solucionador (ej. una versión que soporte división o restas) sin cambiar el código cliente, siempre que se respete el contrato.
 
 ### D - Dependency Inversion Principle (DIP)
-* `TrashCompactor` depende de la abstracción `FileReader` (campo de clase), facilitando el testeo con dobles de prueba, aunque la instanciación directa en el constructor privado es una deuda técnica menor.
+* `TrashCompactor` depende de la abstracción `FileReader` y de la de `ProblemSolver` (campo de clase), facilitando el testeo con dobles de prueba
 
 ---
 

@@ -8,12 +8,8 @@ En la segunda parte, se ignoran las luces y los botones pasan a controlar contad
 
 ---
 ## 1. Metodología: Test Driven Development (TDD)
-
-El diseño muestra una evolución guiada por pruebas, donde la complejidad se ha encapsulado progresivamente:
-
-* **Reto A (Estados):** La clase `NaryTree` y `Node` resuelven el problema de encontrar el camino más corto en un grafo. Al estar desacopladas del parser, permiten probar transiciones de estados simples (ej. ".." -> "#.") sin leer archivos.
-* **Reto B (Matemático):** La clase `LinearSystemsOptimizer` encapsula la complejidad de la librería externa (Apache Commons Math). Esto permite probar la resolución de sistemas de ecuaciones ($Ax=b$) con matrices de prueba simples antes de integrarlo con el parsing de "botones" y "voltajes".
-* **Interfaz Unificadora:** `PushCalculator` define el contrato, permitiendo que los tests de integración verifiquen ambos enfoques sin conocer la implementación subyacente.
+El problema se resolvió utilizando un enfoque **TDD**, lo cual se refleja directamente en la estructura del código resultante.
+Primero se definieron los test y a partir de ellos la creacion de codigo para poder pasar dichos tests
 
 ---
 

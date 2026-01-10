@@ -1,4 +1,4 @@
-# Advent of Code – Día 2
+# Advent of Code – Día 3
 
 ## 🧩 Descripción del problema
 reto A)
@@ -11,10 +11,8 @@ En la segunda parte, la regla cambia y ahora se deben seleccionar exactamente do
 
 ## 1. Metodología: Test Driven Development (TDD)
 
-El diseño modular sugiere un desarrollo guiado por pruebas:
-
-* **Lógica Algorítmica Pura:** La clase `MaxJoltageParser` no tiene dependencias de I/O. Esto permite probar exhaustivamente el algoritmo de selección de dígitos (el núcleo complejo del problema) con strings simples en memoria, validando casos borde como ceros a la izquierda, cadenas cortas o secuencias monótonas.
-* **Orquestación Testable:** `BatteryBank` recibe sus dependencias en el constructor. Esto permite crear tests donde `BatteryParser` sea un *mock* que siempre devuelva un valor fijo, probando así que la suma total funciona correctamente sin depender de la lógica compleja del parser.
+El problema se resolvió utilizando un enfoque **TDD**, lo cual se refleja directamente en la estructura del código resultante.
+Primero se definieron los test y a partir de ellos la creacion de codigo para poder pasar dichos tests
 
 ---
 
@@ -42,7 +40,7 @@ El diseño modular sugiere un desarrollo guiado por pruebas:
 * La clase `BatteryBank` depende de la interfaz `BatteryParser`. Si el requerimiento cambia (ej: "Ahora necesitamos el número *menor* posible" o "La suma de todos los dígitos"), se puede crear una clase `MinJoltageParser` que implemente la interfaz e inyectarla sin modificar ni una línea de `BatteryBank`.
 
 ### D - Dependency Inversion Principle (DIP)
-* **Acierto:** `BatteryBank` depende de abstracciones (`FileReader`, `BatteryParser`) en su constructor y campos, no de implementaciones concretas.
+*`BatteryBank` depende de abstracciones (`FileReader`, `BatteryParser`) en su constructor y campos, no de implementaciones concretas.
 ### L - Liskov Substitution Principle (LSP)
 * `MaxJoltageParser` cumple correctamente el contrato de `BatteryParser`. Cualquier implementación de esta interfaz podría sustituirse sin romper el funcionamiento del acumulador en `BatteryBank`.
 

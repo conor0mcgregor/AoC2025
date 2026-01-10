@@ -11,15 +11,11 @@ En la segunda parte se modifica la regla de conteo: ahora se deben contar todas 
 
 ## 1. Metodología: Test Driven Development (TDD)
 
-El problema se resolvió utilizando un enfoque **TDD**, lo cual se refleja directamente en la estructura del código resultante:
-
-* **Testabilidad Aislada:** La lógica de negocio crítica (el cálculo de rotaciones y contraseñas) se ha encapsulado totalmente en la clase `Dial`. Al no tener dependencias externas (como I/O o red), esta clase permite pruebas unitarias rápidas y exhaustivas para cubrir casos borde (como el cruce por el cero).
-* **Diseño Evolutivo:** La separación entre `Dial` y `DialManeger` sugiere un ciclo *Red-Green-Refactor* donde primero se resolvió la lógica matemática y posteriormente se añadió la capa de gestión de archivos.
-* **Métodos Públicos vs Privados:** La exposición de métodos como `getPosition()` o `getPassword()` facilita las aserciones en los tests, mientras que la complejidad interna se mantiene privada.
-
+El problema se resolvió utilizando un enfoque **TDD**, lo cual se refleja directamente en la estructura del código resultante.
+Primero se definieron los test y a partir de ellos la creacion de codigo para poder pasar dichos tests
 ---
 ## Flujo de ejecucion
-Nombre del archivo se pasa a **`FileReader`** para trasformar a List<String  
+**`DialManeger`** trasforma el archivo a **`List<Strings>`** que representa las diferentes ordenes  
 ↓  
 Cada linea es un split que se le pasa a **`Dial`** y lo procesa
 ---
@@ -36,7 +32,7 @@ Cada clase tiene una única razón para cambiar:
 
 ### O - Open/Closed Principle (OCP)
 El sistema está abierto a la extensión pero cerrado a la modificación:
-* El uso de la interfaz `FileReader` (importada) permite que `DialManeger` pueda operar con diferentes fuentes de datos en el futuro (ej. leer de una URL o base de datos) sin cambiar su lógica interna de procesamiento de giros.
+* El uso de la interfaz `FileReader` permite que `DialManeger` pueda operar con diferentes fuentes de datos en el futuro (ej. leer de una URL o base de datos) sin cambiar su lógica interna de procesamiento de giros.
 
 ### D - Dependency Inversion Principle (DIP)
 * `DialManeger` depende de la abstracción `FileReader`, no de una implementación concreta en su definición de atributos.
@@ -63,7 +59,6 @@ Se han aplicado patrones tácticos para mejorar la legibilidad y el uso de la AP
 * **Naming Semántico:** Variables y métodos autoexplicativos (`rotate`, `isPlusRotation`, `countClicksInZero`).
 * **Small Methods:** Descomposición de problemas grandes en funciones pequeñas y reutilizables.
     * *Ejemplo:* `countClicksInZero` delega en `countRightCliks` y `countLeftCliks`, haciendo la lectura del algoritmo casi textual.
-* **Evitar Números Mágicos (Mejora Potencial):** Aunque el código es limpio, el valor `100` (tamaño del dial) se repite, siendo candidato a convertirse en una constante (`DIAL_SIZE`).
 
 ---
 

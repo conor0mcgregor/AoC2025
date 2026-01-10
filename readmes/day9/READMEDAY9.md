@@ -9,12 +9,8 @@ En la segunda parte se introduce una restricción adicional: el rectángulo solo
 ---
 
 ## 1. Metodología: Test Driven Development (TDD)
-
-La estructura del código facilita un enfoque TDD para validar algoritmos geométricos complejos:
-
-* **Aislamiento de la Geometría:** La clase `Board` encapsula toda la lógica matemática (compresión, validación de áreas). Esto permite probar casos pequeños (ej. un cuadrado de 10x10) donde se puede verificar manualmente si el cálculo del área máxima es correcto, antes de probar con coordenadas gigantes.
-* **Interfaz `Map`:** El uso de la interfaz `Map` permite que el `CinemaSolver` sea probado con implementaciones falsas (Mocks) que devuelvan valores predefinidos, validando el parsing sin ejecutar el costoso algoritmo geométrico.
-* **Separación de Parsing:** `CinemaSolver` transforma los Strings a objetos `Point`, permitiendo que `Board` trabaje con modelos limpios y tipados, eliminando la necesidad de validar formatos de texto dentro de la lógica matemática.
+El problema se resolvió utilizando un enfoque **TDD**, lo cual se refleja directamente en la estructura del código resultante.
+Primero se definieron los test y a partir de ellos la creacion de codigo para poder pasar dichos tests
 
 ---
 

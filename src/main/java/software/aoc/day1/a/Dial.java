@@ -3,8 +3,9 @@ package software.aoc.day1.a;
 public class Dial {
     private int position;
     private int password;
+    private final int DIAL_SIZE = 100;
 
-    private Dial () {this.position = 50;}
+    private Dial () {this.position = DIAL_SIZE/2;}
     public static Dial create() { return new Dial();}
 
 
@@ -13,7 +14,7 @@ public class Dial {
     }
 
     public void rotate(int rotation) {
-        position = ((position + rotation) % 100 + 100) % 100;
+        position = ((position + rotation) % DIAL_SIZE + DIAL_SIZE) % DIAL_SIZE;
         updatePassword();
     }
 

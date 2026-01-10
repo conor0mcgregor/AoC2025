@@ -11,11 +11,8 @@ En la segunda parte se amplía la definición de ID inválido: ahora basta con q
 
 ## 1. Metodología: Test Driven Development (TDD)
 
-El problema se resolvió utilizando un enfoque **TDD**, lo cual se refleja directamente en la granularidad y estructura del código:
-
-* **Testabilidad Aislada:** La lógica de detección de patrones (`isInvalidId`, `conteinPatron`) no depende de archivos ni de la lectura de rangos. Esto permite crear tests unitarios para verificar si un número específico (ej. "121212") es inválido sin ejecutar todo el proceso de lectura.
-* **Diseño Evolutivo:** La extracción de la clase (record) `Range` sugiere un paso de refactorización para aislar la responsabilidad del *parsing* de cadenas ("100-200") de la lógica de validación, facilitando tests específicos para los bordes de los rangos.
-* **Métodos Públicos vs Privados:** `IDValidator` expone métodos de alto nivel (`sumInvalidIds`) que son fáciles de asertar en tests de integración, mientras que la complejidad algorítmica de la detección de patrones se encapsula en métodos privados.
+El problema se resolvió utilizando un enfoque **TDD**, lo cual se refleja directamente en la estructura del código resultante.
+Primero se definieron los test y a partir de ellos la creacion de codigo para poder pasar dichos tests
 
 ---
 
