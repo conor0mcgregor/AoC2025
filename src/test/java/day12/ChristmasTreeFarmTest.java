@@ -4,13 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
-import org.apache.commons.math3.linear.DecompositionSolver;
 import org.junit.jupiter.api.Test;
 import software.aoc.day12.a.ChristmasTreeFarm;
 
 class ChristmasTreeFarmTest {
-
-    private ChristmasTreeFarm ChristmasTreeFarm;
 
     @Test
     void exampleFromStatement_shouldReturn2() {
@@ -83,9 +80,6 @@ class ChristmasTreeFarmTest {
 
         long result = ChristmasTreeFarm.solve(input);
 
-        // 1x1 con 1 regalo → sí
-        // 1x1 con 2 regalos → no
-        // 2x1 con 2 regalos → sí
         assertEquals(2, result);
     }
 

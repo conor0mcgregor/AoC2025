@@ -7,18 +7,17 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-
-
 public class FactoryManagerTest {
+
     @Test
-    void should_return_the_sum_from_the_example_correctly() throws URISyntaxException, IOException {
+    void should_sum_minimum_pulses_for_all_machines_from_example_file() throws URISyntaxException, IOException {
         FactoryManager factoryManager = FactoryManager.create();
         long result = factoryManager.getSumMinPulsesFrom("day10/file1.txt");
         assertThat(result).isEqualTo(33);
     }
 
     @Test
-    void should_return_five_pulses_in_this_example_part_two() throws URISyntaxException, IOException {
+    void should_calculate_minimum_pulses_for_single_machine_with_two_counters() throws IOException {
         FactoryManager factoryManager = FactoryManager.create();
 
         String machines = """
@@ -28,8 +27,9 @@ public class FactoryManagerTest {
         long result = factoryManager.getSumMinPulses(machines);
         assertThat(result).isEqualTo(6);
     }
+
     @Test
-    void should_retur_five_pulses_in_this_example_part_two() throws URISyntaxException, IOException {
+    void should_sum_minimum_pulses_across_multiple_identical_machines() throws IOException {
         FactoryManager factoryManager = FactoryManager.create();
 
         String machines = """
@@ -38,101 +38,14 @@ public class FactoryManagerTest {
             [####] (0) (1) {1,0}
             [####] (0) (1) {1,0}
             [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            [####] (0) (1) {1,0}
-            
             """;
 
         long result = factoryManager.getSumMinPulses(machines);
-        assertThat(result).isEqualTo(6);
+        assertThat(result).isEqualTo(5);
     }
 
     @Test
-    void should_return_one_when_single_counter_needs_one_increment() throws URISyntaxException, IOException {
+    void should_return_one_pulse_when_single_counter_requires_one_increment() throws IOException {
         FactoryManager factoryManager = FactoryManager.create();
 
         String machines = """
@@ -144,7 +57,7 @@ public class FactoryManagerTest {
     }
 
     @Test
-    void should_ignore_buttons_that_do_not_help_reach_target_part_two() throws URISyntaxException, IOException {
+    void should_ignore_buttons_that_do_not_contribute_to_target_counters() throws IOException {
         FactoryManager factoryManager = FactoryManager.create();
 
         String machines = """
@@ -156,7 +69,7 @@ public class FactoryManagerTest {
     }
 
     @Test
-    void should_use_multi_counter_button_optimally() throws URISyntaxException, IOException {
+    void should_minimize_pulses_by_using_multi_counter_buttons() throws IOException {
         FactoryManager factoryManager = FactoryManager.create();
 
         String machines = """
@@ -166,9 +79,4 @@ public class FactoryManagerTest {
         long result = factoryManager.getSumMinPulses(machines);
         assertThat(result).isEqualTo(7);
     }
-
-
-
-
-
 }
