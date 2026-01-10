@@ -6,7 +6,8 @@ import java.net.URISyntaxException;
 public class Main {
     static void main() throws URISyntaxException, IOException {
         FactoryManager factoryManager = FactoryManager.create();
-        long result = factoryManager.getSumMinPulsesFrom("day10/input_day10oc.txt");
+        long result = factoryManager.getSumMinPulsesFrom("day10/input_day10.txt");
         System.out.println(result);
     }
+
 }
