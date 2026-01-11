@@ -1,6 +1,7 @@
 package day2.b;
 
 import org.junit.Test;
+import software.aoc.day2.b.GiftShop;
 import software.aoc.day2.b.IDValidator;
 
 import java.io.IOException;
@@ -45,8 +46,8 @@ public class IDValidatorTest {
 
     @Test
     public void should_sum_all_invalid_id_from_file() throws URISyntaxException, IOException {
-        IDValidator idValidator = IDValidator.create();
-        assertThat(idValidator.sumInvalidIdsFromFile("day2/a/input_aoc.txt")).isEqualTo(4174379265L);
+        GiftShop giftShop = GiftShop.create();
+        assertThat(giftShop.sumInvalidIdsFromFile("day2/a/input_aoc.txt")).isEqualTo(4174379265L);
     }
 
 }

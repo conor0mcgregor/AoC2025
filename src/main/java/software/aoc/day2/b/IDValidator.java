@@ -1,31 +1,14 @@
 package software.aoc.day2.b;
 
-import software.aoc.FileReader;
-import software.aoc.ResourceFileReader;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.Arrays;
 import java.util.stream.LongStream;
 
-public class IDValidator {
-    private final FileReader reader;
-    private IDValidator(FileReader reader) {this.reader = reader;}
+public class IDValidator implements IDVerifier{
+    private IDValidator() {}
 
-    public static IDValidator create() {return new IDValidator(new ResourceFileReader());}
+    public static IDValidator create() {return new IDValidator();}
 
-    public long sumInvalidIdsFromFile(String fileName) throws URISyntaxException, IOException {
-        String ranges = reader.read(fileName).readLine();
-        return sumAllInvalidIds(ranges);
-    }
-
-    private long sumAllInvalidIds(String ranges) {
-        return Arrays.stream(ranges.split(","))
-                .mapToLong(this::sumInvalidIdInStrRange)
-                .sum();
-    }
-
-    private long sumInvalidIdInStrRange(String rangeStr) {
+    @Override
+    public long sumInvalidIdInStrRange(String rangeStr) {
         Range range = Range.with(rangeStr);
         return sumInvalidIds(range.a(), range.b());
     }

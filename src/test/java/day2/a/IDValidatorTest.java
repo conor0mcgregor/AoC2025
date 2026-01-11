@@ -2,6 +2,7 @@ package day2.a;
 
 import org.junit.Test;
 import software.aoc.day2.a.IDValidator;
+import software.aoc.day2.b.GiftShop;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -38,16 +39,16 @@ public class IDValidatorTest {
     @Test
     public void given_range_should_sum_invalids_ids() {
         IDValidator idValidator = IDValidator.create();
-        assertThat(idValidator.sumInvalidIds(11,22)).isEqualTo(33);
-        assertThat(idValidator.sumInvalidIds(95,115)).isEqualTo(99);
-        assertThat(idValidator.sumInvalidIds(998,1012)).isEqualTo(1010);
-        assertThat(idValidator.sumInvalidIds(1188511880,1188511890)).isEqualTo(1188511885);
+        assertThat(idValidator.sumInvalidIdInStrRange("11-22")).isEqualTo(33);
+        assertThat(idValidator.sumInvalidIdInStrRange("95-115")).isEqualTo(99);
+        assertThat(idValidator.sumInvalidIdInStrRange("998-1012")).isEqualTo(1010);
+        assertThat(idValidator.sumInvalidIdInStrRange("1188511880-1188511890")).isEqualTo(1188511885);
     }
 
     @Test
     public void should_sum_all_invalid_id_from_file() throws URISyntaxException, IOException {
-        IDValidator idValidator = IDValidator.create();
-        assertThat(idValidator.sumInvalidIdsFromFile("day2/a/input_aoc.txt")).isEqualTo(1227775554);
+        GiftShop giftShop = GiftShop.create();
+        assertThat(giftShop.sumInvalidIdsFromFile("day2/a/input_aoc.txt")).isEqualTo(1227775554);
     }
 
 }

@@ -18,70 +18,68 @@ Primero se definieron los test y a partir de ellos la creacion de codigo para po
 
 ## Flujo de ejecución
 
-Nombre del archivo se pasa a **`IDValidator`** para leer la línea de rangos  
-↓  
-La cadena de rangos se divide (split) y cada segmento se transforma en un objeto **`Range`** ↓  
-Se genera un **`LongStream`** con todos los números entre el inicio y fin del rango  
-↓  
-Cada número se evalúa en **`IDValidator`** para detectar patrones repetitivos
+1. **Main** delega la ejecución a **`GiftShop`**, pasando el nombre del archivo.
+2. **`GiftShop`** utiliza `FileReader` para obtener la cadena de rangos cruda.
+3. La cadena se divide (split) y cada segmento se pasa al componente **`IDVerifier`** (`IDValidator`).
+4. **`IDValidator`** transforma el string en un objeto **`Range`**.
+5. Se genera un **`LongStream`** con los números del rango y se evalúan buscando patrones repetitivos.
 
 ---
 
 ## 2. Principios SOLID
 
-El diseño respeta los principios SOLID para garantizar un software mantenible y robusto:
+El diseño ha mejorado significativamente su adherencia a SOLID con la última refactorización:
 
 ### S - Single Responsibility Principle (SRP)
-Cada componente tiene una responsabilidad clara:
-* **`Range` (Record)**: Responsabilidad de transporte y parsing. Solo se encarga de interpretar una cadena de texto ("min-max") y convertirla en un par de valores numéricos utilizables.
-* **`IDValidator`**: Responsabilidad de lógica de negocio. Orquesta la lectura, genera los flujos de números y determina si un ID es inválido según el patrón.
-* **`Main`**: Responsabilidad de punto de entrada (Entry Point).
+La separación de responsabilidades es ahora estricta:
+* **`GiftShop`**: Responsabilidad de **Orquestación e Infraestructura**. Maneja la lectura del archivo (`FileReader`) y coordina el flujo de datos hacia el validador.
+* **`IDValidator`**: Responsabilidad de **Lógica de Dominio**. Contiene exclusivamente los algoritmos matemáticos y de cadenas para detectar patrones. No sabe nada de archivos.
+* **`Range`**: Responsabilidad de **Datos**. Transporte y parsing de "min-max".
 
 ### O - Open/Closed Principle (OCP)
-El sistema está diseñado para permitir cambios sin modificar el código base excesivamente:
-* El algoritmo de detección `findPatron` es genérico (iterativo). Si el problema cambiara para detectar patrones que se repiten 3 veces en lugar de 2, o cualquier cantidad `N` veces (como pide el reto B), la lógica actual ya lo soporta sin necesidad de reescribir la estructura, simplemente iterando sobre los divisores de la longitud.
+* El sistema depende de la interfaz `IDVerifier`. Si mañana se requiere una nueva regla de validación (ej. "IDs palíndromos"), se puede crear una clase `PalindromeVerifier` que implemente la interfaz, sin necesidad de modificar la lógica de lectura en `GiftShop`.
 
 ### D - Dependency Inversion Principle (DIP)
-* `IDValidator` depende de la abstracción `FileReader`, recibiéndola en su constructor privado. Esto desacopla la validación de la fuente de datos (disco, red, memoria).
+* `GiftShop` (alto nivel) depende de la abstracción `FileReader` para I/O y de la interfaz `IDVerifier` para la lógica, invirtiendo el control y aislando el dominio.
+
+### I - Interface Segregation Principle (ISP)
+* Se ha introducido `IDVerifier`, que expone un único método necesario (`sumInvalidIdInStrRange`), evitando que los clientes dependan de métodos internos del validador.
 
 ---
 
 ## 3. Patrones de Diseño
 
-Se han aplicado patrones tácticos para mejorar la legibilidad y la seguridad de tipos:
-
+* **Facade (Fachada):**
+    * `GiftShop` actúa como una fachada que simplifica el sistema para el `Main`. El cliente solo llama a `sumInvalidIdsFromFile` sin preocuparse por rangos, streams o validadores internos.
 * **Static Factory Method:**
-    * Uso de `IDValidator.create()` y `Range.with()`.
-    * **Beneficio:** Aporta semántica (`Range.with("1-10")` es más legible que un constructor) y encapsula la lógica de creación (como la instanciación del `ResourceFileReader` por defecto).
-* **Value Object:**
-    * Implementación de `Range` como un Java Record.
-    * **Beneficio:** Garantiza inmutabilidad, igualdad semántica automática (dos rangos con los mismos valores son iguales) y reduce el *boilerplate*.
-* **Strategy (Implícito):**
-    * La inyección de `FileReader` actúa como una estrategia de lectura, permitiendo cambiar el origen de los datos en tiempo de test.
+    * Uso de `GiftShop.create()` e `IDValidator.create()`.
+    * **Beneficio:** Oculta los constructores y permite en el futuro inyectar dependencias o devolver subclases sin cambiar el código cliente.
+* **Strategy Pattern:**
+    * `GiftShop` delega la validación en un objeto `IDVerifier`. `IDValidator` es la estrategia concreta actual para validar IDs mediante patrones repetitivos.
 
 ---
 
 ## 4. Clean Code y Estilo
 
-* **Naming Semántico:** Los métodos cuentan una historia: `sumAllInvalidIds` -> `sumInvalidIdInStrRange` -> `isInvalidId`.
-* **Small Methods:** El algoritmo de detección de patrones, que es complejo, se ha desglosado en pasos atómicos:
-    * `conteinPatron`: Prepara los datos.
-    * `findPatron`: Itera sobre posibles longitudes de patrón.
-    * `existPatronIn`: Verifica si un patrón específico se repite.
-* **Uso de Java Records:** El uso de `record Range` limpia el código de *getters*, *setters* y constructores verbosos.
+* **Naming Semántico:** `conteinPatron`, `existPatronIn`. Los nombres reflejan el "qué" hace el código.
+* **Small Methods:** `IDValidator` descompone el problema complejo en pasos pequeños:
+    1.  `isInvalidId` -> Llama a detección.
+    2.  `findPatron` -> Itera longitudes posibles.
+    3.  `existPatronIn` -> Verifica una longitud específica con `String.repeat()`.
+* **Inmutabilidad:** `Range` sigue siendo un `record`, garantizando seguridad en el paso de mensajes.
 
 ---
 
 ## 5. Justificación de Decisiones Técnicas
 
-### Gestión de Flujos de Datos (LongStream)
-Se utiliza `LongStream.rangeClosed(start, end)` para generar los números a verificar.
-* **Justificación:** Dado que los rangos pueden ser enormes (millones de IDs), usar una `List<Long>` llenaría la memoria (Heap). El Stream evalúa los números de forma perezosa (*lazy evaluation*), procesando uno a uno sin almacenarlos todos, lo cual es crítico para el rendimiento y la estabilidad de memoria.
+### Separación de `GiftShop` vs `IDValidator`
+* **Decisión:** Mover la lectura de archivos fuera de `IDValidator`.
+* **Justificación:** Mezclar lógica de negocio (matemáticas/patrones) con infraestructura (I/O) hace que el código sea rígido y difícil de probar. Ahora `IDValidator` es una función pura (misma entrada -> misma salida) sin efectos secundarios externos.
 
-### Algoritmo de Detección (String vs Math)
-Para verificar si un número tiene un patrón repetido (ej. 123123), se convierte el número a `String` y se usa manipulación de cadenas (`substring`, `repeat`).
-* **Justificación:** Aunque operar matemáticamente (división y módulo) es más rápido en CPU puro, la lógica para detectar repeticiones de *longitud variable* (Reto B) es mucho más compleja de implementar matemáticamente. La conversión a String simplifica drásticamente la lectura y mantenimiento del código (`pattern.repeat(repetitions).equals(strId)`), con un costo de rendimiento aceptable para este contexto.
+### Algoritmo de Detección (String Manipulation)
+* **Código:** `pattern.repeat(repetitions).equals(strId)`.
+* **Justificación:** Para el Reto B (repeticiones arbitrarias), la manipulación de Strings es superior a la aritmética modular. Permite verificar visualmente si un bloque de texto se repite N veces exactas para cubrir el ID completo, cubriendo casos como "121212" (patrón 12, rep 3) o "123123" (patrón 123, rep 2) con un solo algoritmo genérico.
 
-### Estructuras de Datos
-* **`long`**: Se usa `long` en lugar de `int` para los IDs y sumas.
-* **Justificación:** El problema menciona "números grandes" y la suma de estos IDs inválidos probablemente exceda el límite de `Integer.MAX_VALUE` (2 mil millones), por lo que `long` es necesario para evitar *overflow*.
+### Streams para Rangos Grandes
+* **Uso:** `LongStream.rangeClosed(...)`.
+* **Justificación:** Esencial para eficiencia de memoria. Evita crear colecciones intermedias para rangos de millones de números, procesando cada ID bajo demanda.
