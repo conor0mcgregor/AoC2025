@@ -225,7 +225,7 @@ Un estilo de API donde los métodos devuelven el propio objeto (this), permitien
 ### Cómo lo usaste
 En DialManeger, los métodos retornan this:
 
-```java
+```
 manager.ordersOfSpins(...)
        .getPosition();
 ```
@@ -334,12 +334,12 @@ Un objeto:
 - sin identidad propia
 
 ### Cómo lo usaste
-```java
+```
 record Range(long a, long b)
 ```
 
 Y también:
-```java
+```
 record Point(int x, int y)
 ```
 
@@ -386,7 +386,7 @@ Encapsular:
 en un solo objeto.
 
 ### Cómo lo usaste
-```java
+```
 record Problem(...) {
     long solve() { ... }
 }
@@ -431,7 +431,7 @@ Complejidad exponencial por:
 - recursión
 
 ### Cómo lo usaste
-```java
+```
 Map<String, Long> memo
 ```
 
@@ -471,7 +471,7 @@ Un patrón estructural donde:
 Delegar la lógica de comparación al objeto que sabe comparar.
 
 ### Cómo lo usaste
-```java
+```
 class Edge implements Comparable<Edge>
 ```
 
@@ -540,7 +540,7 @@ Desde (0,0):
 Objetos simples, inmutables, solo datos.
 
 ### Cómo lo usaste
-```java
+```
 record Point
 ```
 
@@ -589,7 +589,7 @@ Métodos secuenciales en Reactor:
 Representación estándar de grafos dispersos.
 
 ### Cómo lo usaste
-```java
+```
 List<Node> destNodes
 ```
 
