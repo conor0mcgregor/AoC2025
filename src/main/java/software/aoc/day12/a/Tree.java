@@ -31,7 +31,7 @@ record Tree(int width, int height, int[] presentCounts) {
     public boolean allPresentsFit(List<Present> presents) {
         List<Present> presentsToFit = expandPresents(presents);
 
-        PresentPacker packer = new PresentPacker(width, height);
+        PresentPacker packer = PresentPacker.create(width, height);
         return packer.canFitAllPresents(presentsToFit);
     }
 

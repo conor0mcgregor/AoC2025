@@ -1,183 +1,645 @@
-# Principios SOLID
+# 3. Fundamentos de diseño (el "qué queremos conseguir")
 
-Los principios **SOLID** son un conjunto de cinco principios de diseño orientado a objetos cuyo objetivo es mejorar la **calidad del software**, favoreciendo un código más **mantenible, extensible, reutilizable y testable**.
+Los fundamentos son las cualidades deseables de cualquier sistema bien diseñado.
 
-Estos principios no son reglas estrictas, sino **guías de diseño** que ayudan a tomar mejores decisiones arquitectónicas.
+## 3.1 Alta cohesión
+
+Un módulo/clase debe hacer una sola cosa y hacerla bien.
+
+📌 **Ejemplo:**
+* ❌ Clase `Usuario` que gestiona datos, imprime informes y accede a la BD
+* ✅ Clase `Usuario` solo gestiona datos del usuario
+
+👉 **Beneficio:** código más claro y fácil de modificar.
+
+## 3.2 Bajo acoplamiento
+
+Los módulos deben depender lo menos posible unos de otros.
+
+📌 **Ejemplo:**
+* ❌ Clase A conoce todos los detalles internos de la clase B
+* ✅ Clase A solo usa una interfaz de B
+
+👉 **Beneficio:** cambiar una parte no rompe el resto.
+
+## 3.3 Modularidad
+
+Dividir el sistema en partes independientes.
+
+📌 **Ejemplo:**
+* Módulo de usuarios
+* Módulo de pagos
+* Módulo de notificaciones
+
+👉 **Beneficio:** se puede trabajar, probar y mantener cada módulo por separado.
+
+## 3.4 Código expresivo
+
+El código debe leerse como un texto claro, no como un acertijo.
+
+📌 **Ejemplo:**
+* ❌ `calc(x, y)`
+* ✅ `calcularPrecioFinal(precioBase, impuestos)`
+
+👉 **Beneficio:** menos errores y menos tiempo entendiendo código antiguo.
+
+## 3.5 Abstracción
+
+Ocultar la complejidad detrás de una interfaz simple.
+
+📌 **Ejemplo:**
+* Usas `guardarArchivo()` sin saber si guarda en disco, nube o base de datos.
+
+👉 **Beneficio:** puedes cambiar la implementación sin afectar al resto.
+---
+# 4. Principios de diseño (las reglas para lograr los fundamentos)
+
+Los principios son normas prácticas que ayudan a cumplir los fundamentos.
+
+## 4.1 SRP – Principio de Responsabilidad Única
+
+Una clase debe tener una sola razón para cambiar.
+
+📌 **Ejemplo:**
+* ❌ Clase que calcula facturas y las imprime
+* ✅ Una clase calcula, otra imprime
+
+🔗 **Relacionado con:** alta cohesión
+
+## 4.2 OCP – Abierto/Cerrado
+
+Abierto para extender, cerrado para modificar.
+
+📌 **Ejemplo:**
+* Añadir nuevos tipos de pago sin tocar el código existente.
+
+🔗 Evita romper código ya probado.
+
+## 4.3 LSP – Sustitución de Liskov
+
+Un objeto hijo debe poder usarse como su padre sin errores.
+
+📌 **Ejemplo:**
+* Si `Perro` hereda de `Animal`, no debe romper comportamientos esperados.
+
+👉 Garantiza herencias correctas.
+
+## 4.4 ISP – Segregación de Interfaces
+
+No obligar a implementar métodos que no se usan.
+
+📌 **Ejemplo:**
+* ❌ Interfaz gigante con 20 métodos
+* ✅ Interfaces pequeñas y específicas
+
+🔗 Favorece bajo acoplamiento.
+
+## 4.5 DIP – Inversión de Dependencias
+
+Los módulos importantes dependen de abstracciones, no de detalles.
+
+📌 **Ejemplo:**
+* Usar interfaces en lugar de clases concretas.
+
+👉 Clave para testear y escalar.
+
+## 4.6 Composición sobre herencia
+
+Es mejor tener un objeto que ser un objeto.
+
+📌 **Ejemplo:**
+* ❌ `CocheDeportivo extends Coche`
+* ✅ `Coche` tiene un `Motor`
+
+👉 Evita jerarquías rígidas.
+
+## 4.7 Ley de Demeter
+
+"No hables con extraños".
+
+📌 **Ejemplo:**
+* ❌ `a.getB().getC().doSomething()`
+* ✅ `a.doSomething()`
+
+👉 Reduce dependencias ocultas.
+
+## 4.8 DRY – Don't Repeat Yourself
+
+No repetir conocimiento.
+
+📌 **Ejemplo:**
+* ❌ Misma fórmula copiada en 5 sitios
+* ✅ Una función reutilizable
+
+## 4.9 CoC – Convención sobre configuración
+
+Menos configuración, más convenciones.
+
+📌 **Ejemplo:**
+* Frameworks que funcionan "por defecto".
+
+## 4.10 YAGNI
+
+No implementes algo "por si acaso".
+
+📌 **Ejemplo:**
+* No crear funcionalidades que nadie necesita aún.
+
+👉 Evita sobreingeniería.
 
 ---
 
-## 🧱 ¿Qué significa SOLID?
+# 5. Patrones de diseño (soluciones reutilizables)
 
-SOLID es un acrónimo que representa cinco principios fundamentales:
+Los patrones son formas probadas de resolver problemas habituales.
 
-- **S**: Single Responsibility Principle
-- **O**: Open/Closed Principle
-- **L**: Liskov Substitution Principle
-- **I**: Interface Segregation Principle
-- **D**: Dependency Inversion Principle
+## 5.1 Singleton
 
----
+Una sola instancia global.
 
-## 1️⃣ Single Responsibility Principle (SRP)
+📌 **Usos:**
+* Configuración
+* Logs
+* Conexión a BD
 
-**Una clase debe tener una única razón para cambiar.**
+⚠️ Debe usarse con cuidado.
 
-### Explicación
-Cada clase o módulo debe encargarse de **una sola responsabilidad** dentro del sistema.  
-Si una clase tiene más de un motivo para cambiar, es señal de que está asumiendo demasiadas funciones.
+## 5.2 Factory Method
 
-### Beneficios
-- Mayor cohesión
-- Menor acoplamiento
-- Código más fácil de entender y mantener
+Delegar la creación de objetos.
 
-### Ejemplo conceptual
-Separar:
-- Lógica de negocio
-- Gestión de entrada
-- Presentación de resultados
+📌 **Beneficio:**
+* No acoplas el código a clases concretas.
 
-en lugar de concentrarlo todo en una sola clase.
+## 5.3 Iterator
 
----
+Recorrer colecciones sin conocer su estructura.
 
-## 2️⃣ Open/Closed Principle (OCP)
+📌 **Ejemplo:**
+* `for each` en listas, árboles, etc.
 
-**Las entidades de software deben estar abiertas para extensión, pero cerradas para modificación.**
+## 5.4 Adapter
 
-### Explicación
-El comportamiento del sistema debe poder ampliarse **sin modificar el código existente**, evitando introducir errores en funcionalidades ya probadas.
+Hace compatibles interfaces incompatibles.
 
-Esto se logra mediante:
-- Abstracciones
-- Interfaces
-- Polimorfismo
+📌 **Ejemplo:**
+* Usar una librería antigua con una interfaz nueva.
 
-### Beneficios
-- Mayor estabilidad del código
-- Facilita la evolución del sistema
-- Reduce el riesgo de regresiones
+## 5.5 Decorator
 
----
+Añadir comportamiento dinámicamente.
 
-## 3️⃣ Liskov Substitution Principle (LSP)
+📌 **Ejemplo:**
+* Añadir permisos, logs o validaciones sin modificar la clase original.
 
-**Las clases derivadas deben poder sustituir a sus clases base sin alterar el comportamiento esperado del sistema.**
+## 5.6 Observer
 
-### Explicación
-Si una clase implementa una interfaz o hereda de otra, debe **respetar el contrato** definido.  
-El código que usa la abstracción no debería notar la diferencia al cambiar la implementación.
+Uno cambia → muchos se actualizan.
 
-### Beneficios
-- Uso seguro del polimorfismo
-- Comportamiento predecible
-- Código más robusto
+📌 **Ejemplo:**
+* Interfaces gráficas
+* Eventos
 
----
+👉 Muy desacoplado.
 
-## 4️⃣ Interface Segregation Principle (ISP)
+## 5.7 Command
 
-**Es mejor tener muchas interfaces pequeñas y específicas que una interfaz grande y genérica.**
+Encapsular acciones como objetos.
 
-### Explicación
-Las clases no deberían verse obligadas a implementar métodos que no necesitan.  
-Las interfaces deben estar enfocadas a un propósito concreto.
+📌 **Usos:**
+* Deshacer/rehacer
+* Colas de tareas
 
-### Beneficios
-- Menor acoplamiento
-- Mayor claridad
-- Implementaciones más simples
+# PATRONES Y TÉCNICAS NUEVAS (explicadas una sola vez)
 
----
+## 1. Fluent Interface (Method Chaining)
 
-## 5️⃣ Dependency Inversion Principle (DIP)
+### Qué es
+Un estilo de API donde los métodos devuelven el propio objeto (this), permitiendo encadenar llamadas.
 
-**Los módulos de alto nivel no deben depender de módulos de bajo nivel, sino de abstracciones.**
+### Problema que resuelve
+- APIs verbosas
+- Código imperativo poco legible
+- Configuraciones paso a paso poco claras
 
-### Explicación
-El código debe depender de **interfaces o abstracciones**, no de implementaciones concretas.  
-Esto permite cambiar detalles técnicos sin afectar a la lógica principal.
+### Cómo lo usaste
+En DialManeger, los métodos retornan this:
 
-### Beneficios
-- Mayor flexibilidad
-- Facilita las pruebas unitarias
-- Reduce dependencias rígidas
-
----
-Aquí está el documento simplificado:
-
----
-# Patrones de diseño
-
-## 🏭 Static Factory Method
-
-**Descripción:** Patrón creacional que utiliza un método estático para crear instancias de una clase en lugar de exponer directamente sus constructores, permitiendo nombres significativos que describan la intención de la creación.  
-**Ejemplo:** `DialManager.create();`
-
----
-
-## 🔗 Fluent Interface (Method Chaining)
-
-**Descripción:** Patrón que permite encadenar llamadas a métodos devolviendo el propio objeto (`this`), creando una API más expresiva y declarativa cercana al lenguaje natural.  
-**Ejemplo:** `order.addItem().setPrice().confirm();`
-
----
-
-## 🪟 Facade (Fachada)
-
-**Descripción:** Patrón que proporciona una interfaz simple y unificada para acceder a un conjunto de subsistemas más complejos, permitiendo que el cliente interactúe únicamente con la fachada sin conocer la complejidad interna.  
-**Ejemplo:** `DialManager`
-
----
-
-## 💎 Value Object
-
-**Descripción:** Patrón que representa un concepto del dominio mediante un objeto **inmutable**, cuya identidad se define por sus valores y no por una referencia.  
-**Ejemplo:** `record Money(amount, currency)`
-
-## 🧙‍♂️ Object Mother / Result Object (Inner Class)
-
-**Descripción:** Patrón que ayuda a **crear objetos de prueba complejos** de forma sencilla (Object Mother) o encapsula resultados y errores dentro de una clase interna (Result Object).  
-**Ejemplo:** `UserMother.createAdminUser();` / `OperationResult.success(data)`
-
----
-
-## 🎯 Strategy Pattern
-
-**Descripción:** Patrón de comportamiento que define una **familia de algoritmos**, encapsula cada uno y los hace intercambiables, permitiendo que el algoritmo varíe independientemente del cliente.  
-**Ejemplo:** `payment.setStrategy(new CreditCardPayment()).pay();`
-
-## 🔄 Simulation / State Loop
-
-**Descripción:** Patrón que organiza la ejecución de una simulación o sistema en **estados discretos**, iterando en un bucle principal que actualiza el estado y la lógica del sistema de manera controlada.  
-**Ejemplo:**
-```
-while(simulation.isRunning()) {
-    simulation.updateState();
-    simulation.render();
-}
-```
-## 🛠️ Command Pattern (Variación)
-
-**Descripción:** Patrón de comportamiento que encapsula una **acción como objeto**, permitiendo parametrizar clientes con diferentes operaciones, almacenar historial o deshacer/rehacer acciones.  
-**Ejemplo:**
-```
-Command save = new SaveCommand(document);
-editor.executeCommand(save);
-```
-## 🧠 Memoization (Dynamic Programming)
-
-**Descripción:** Técnica que almacena los resultados de funciones costosas para **reutilizarlos en llamadas futuras**, evitando cálculos repetidos y mejorando el rendimiento.  
-**Ejemplo:**
 ```java
-Map<Integer, Integer> cache = new HashMap<>();
+manager.ordersOfSpins(...)
+       .getPosition();
+```
 
-int fib(int n) {
-    if (cache.containsKey(n)) return cache.get(n);
-    int result = (n <= 1) ? n : fib(n-1) + fib(n-2);
-    cache.put(n, result);
-    return result;
+### Por qué está bien
+- El código se lee como una frase
+- Reduce variables temporales
+- Muy expresivo para configuraciones
+
+👉 Es diseño orientado a legibilidad y expresividad.
+
+---
+
+## 2. Object Mother / Result Object (clase interna)
+
+### Qué es
+Un patrón para devolver múltiples valores relacionados sin usar:
+- arrays confusos
+- variables globales
+- parámetros de salida
+
+### Problema que resuelve
+Java solo devuelve un valor por método.
+
+### Cómo lo usaste
+Clase interna:
+
+```java
+private static class MaxDigitResult {
+    long value;
+    int index;
 }
 ```
 
+Para devolver:
+- el dígito máximo
+- su posición
 
+### Por qué está bien
+- Semántica clara
+- Tipado fuerte
+- Evita "posición mágica" en arrays (result[0], result[1])
+
+👉 Es mejor diseño que devolver arrays.
+
+---
+
+## 3. Simulation / State Loop
+
+### Qué es
+Un patrón algorítmico donde:
+- el sistema se ejecuta en ciclos
+- cada iteración modifica el estado
+- se detiene cuando no hay cambios
+
+### Problema que resuelve
+Casos donde:
+- una sola pasada no basta
+- las reglas tienen efectos en cascada
+
+### Cómo lo usaste
+En parse:
+- no es un algoritmo directo
+- se repite hasta que el sistema se estabiliza
+
+### Por qué está bien
+- Refleja fielmente el modelo del problema
+- Evita lógica frágil "todo en una pasada"
+
+👉 Muy usado en simulaciones físicas, económicas, grafos.
+
+---
+
+## 4. Composite / Manager
+
+### Qué es
+Una variación del Composite donde:
+- un objeto gestiona una colección
+- expone operaciones de alto nivel
+- oculta la estructura interna
+
+### Problema que resuelve
+Evitar que el cliente:
+- gestione listas
+- sepa cómo se almacenan los elementos
+
+### Cómo lo usaste
+RangesManager:
+- contiene `List<Range>`
+- expone `addRange`, `getSizeRanges`
+
+### Por qué está bien
+- Encapsulación total
+- El cliente no sabe ni le importa cómo se gestionan los rangos
+
+👉 Muy buen diseño orientado a abstracción.
+
+---
+
+## 5. Value Object (más allá de lo básico)
+
+### Qué es
+Un objeto:
+- inmutable
+- definido por sus valores
+- sin identidad propia
+
+### Cómo lo usaste
+```java
+record Range(long a, long b)
+```
+
+Y también:
+```java
+record Point(int x, int y)
+```
+
+### Por qué está perfecto
+- Inmutabilidad → seguridad
+- Ideal para matemáticas, coordenadas, intervalos
+- Facilita pruebas y razonamiento
+
+👉 Esto es diseño funcional moderno en Java.
+
+---
+
+## 6. Recursive Optimization (Efecto Cascada)
+
+### Qué es
+Una técnica donde una operación:
+- puede habilitar nuevas operaciones
+- y se llama recursivamente hasta cerrar el sistema
+
+### Problema que resuelve
+Unificar rangos:
+- una fusión puede crear otra fusión posible
+
+### Cómo lo usaste
+```
+unify → updateRanges → unify
+```
+
+### Por qué está bien
+- Garantiza estado final correcto
+- Evita bucles complejos y flags
+
+👉 Es una recursión semánticamente justificada, no accidental.
+
+---
+
+## 7. Command Pattern (variación funcional)
+
+### Qué es
+Encapsular:
+- los datos
+- la acción
+
+en un solo objeto.
+
+### Cómo lo usaste
+```java
+record Problem(...) {
+    long solve() { ... }
+}
+```
+
+### Por qué está bien
+- El objeto representa una acción
+- Puede almacenarse, ejecutarse, reutilizarse
+
+👉 Es Command sin sobreingeniería.
+
+---
+
+## 8. DTO / Value Object combinado
+
+### Qué es
+Un objeto que:
+- transporta datos
+- es inmutable
+- tiene significado semántico
+
+### Cómo lo usaste
+Problem como:
+- DTO (datos)
+- Value Object (identidad por valor)
+
+### Por qué está bien
+- No hay setters
+- No hay estado intermedio
+- Totalmente seguro en concurrencia
+
+---
+
+## 9. Memoization (Dynamic Programming)
+
+### Qué es
+Guardar resultados de subproblemas ya calculados.
+
+### Problema que resuelve
+Complejidad exponencial por:
+- bifurcaciones
+- recursión
+
+### Cómo lo usaste
+```java
+Map<String, Long> memo
+```
+
+Clave compuesta por:
+- posición
+- estado lógico
+
+### Impacto
+De exponencial → casi lineal
+
+Brutal mejora de rendimiento
+
+👉 Esto es ingeniería algorítmica de alto nivel.
+
+---
+
+## 10. Composite Pattern (grafos)
+
+### Qué es
+Un patrón estructural donde:
+- objetos contienen otros objetos
+- se tratan de forma uniforme
+
+### Cómo lo usaste
+- GraphSet → contiene Graph
+- Graph → contiene Node
+
+### Por qué está bien
+- Jerarquía clara
+- Operaciones recursivas naturales
+
+---
+
+## 11. Comparable (Patrón Experto)
+
+### Qué es
+Delegar la lógica de comparación al objeto que sabe comparar.
+
+### Cómo lo usaste
+```java
+class Edge implements Comparable<Edge>
+```
+
+### Por qué está bien
+- `Collections.sort()` sin lógica externa
+- Cohesión alta
+
+👉 Es aplicar responsabilidad donde corresponde.
+
+---
+
+## 12. Coordinate Compression
+
+### Qué es
+Técnica algorítmica para:
+- mapear valores grandes y dispersos
+- a índices pequeños consecutivos
+
+### Problema que resuelve
+Memoria imposible:
+- coordenadas tipo 1.000.000
+
+### Por qué está bien
+- Permite usar arrays
+- Mantiene relaciones espaciales
+
+👉 Patrón típico de programación competitiva y sistemas eficientes.
+
+---
+
+## 13. Prefix Sum 2D
+
+### Qué es
+Precalcular sumas acumuladas para consultas O(1).
+
+### Cómo lo usaste
+Para verificar:
+- si un rectángulo tiene celdas exteriores
+
+### Por qué está bien
+- Evita recorrer submatrices
+- Escala muy bien
+
+---
+
+## 14. Flood Fill (BFS)
+
+### Qué es
+Algoritmo para:
+- recorrer áreas conectadas
+- marcar regiones
+
+### Cómo lo usaste
+Desde (0,0):
+- marcas todo lo exterior
+
+### Por qué está perfecto
+- BFS evita desbordamiento de pila
+- Claridad total del modelo
+
+---
+
+## 15. Immutable Data Carrier
+
+### Qué es
+Objetos simples, inmutables, solo datos.
+
+### Cómo lo usaste
+```java
+record Point
+```
+
+### Por qué está bien
+- Seguridad
+- Ningún efecto colateral
+
+---
+
+## 16. Adapter Pattern
+
+### Qué es
+Convertir una interfaz en otra esperada por el sistema.
+
+### Cómo lo usaste
+StateCalculator:
+- entrada textual
+- salida en grafos o sistemas lineales
+
+### Por qué está perfecto
+- Desacopla parsing de lógica
+- Reutilizable
+
+---
+
+## 17. Builder Pattern (simplificado)
+
+### Qué es
+Construcción paso a paso de un objeto complejo.
+
+### Cómo lo usaste
+Métodos secuenciales en Reactor:
+- parse
+- build
+- assemble
+
+### Por qué está bien
+- No necesitas una clase Builder formal
+- El flujo es claro
+
+---
+
+## 18. Adjacency List
+
+### Qué es
+Representación estándar de grafos dispersos.
+
+### Cómo lo usaste
+```java
+List<Node> destNodes
+```
+
+### Por qué está bien
+- Memoria eficiente
+- Recorridos rápidos
+
+---
+
+## 19. Backtracking
+
+### Qué es
+Explorar decisiones:
+- probar
+- deshacer
+- probar otra opción
+
+### Cómo lo usaste
+```
+tryPlaceAllPresents
+```
+
+### Por qué está bien
+- DFS natural
+- Código limpio
+
+---
+
+## 20. Flyweight / Caching
+
+### Qué es
+Precalcular y reutilizar objetos pesados.
+
+### Cómo lo usaste
+Rotaciones calculadas una vez.
+
+### Impacto
+- Ahorro masivo de CPU
+- Ideal para recursión profunda
+
+---
+
+## 21. Prototype (Clonación)
+
+### Qué es
+Copiar estado para aislar ramas de ejecución.
+
+### Cómo lo usaste
+Clonado manual de matrices en backtracking.
+
+### Por qué está bien
+- Inmutabilidad lógica
+- Cada rama tiene su propio "universo"

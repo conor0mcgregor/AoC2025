@@ -7,12 +7,16 @@ public class PresentPacker {
     private final int width;
     private final int height;
 
-    public PresentPacker(int width, int height) {
+    private PresentPacker(int width, int height) {
         if (width <= 0 || height <= 0) {
             throw new IllegalArgumentException("Width and height must be positive");
         }
         this.width = width;
         this.height = height;
+    }
+
+    public static PresentPacker create(int width, int height) {
+        return new PresentPacker(width, height);
     }
 
     public boolean canFitAllPresents(List<Present> presentsToFit) {
